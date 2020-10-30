@@ -1,12 +1,12 @@
 <template>
     <div id="app">
         <vueslideshow>
-            <div class="container">
+            
                 <div class="content" v-bind:key="image" v-for="image in images">
                     <img :src="image" />
                 </div>
                 
-            </div>
+            
         </vueslideshow>
         <br />
         <button @click="addContent">Add</button>

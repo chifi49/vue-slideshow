@@ -1,20 +1,41 @@
 <template>
     <div>
-        <slot></slot>
+        <div class="container">
+            <slot></slot>
+            <div v-show="navigation" class="nav-left" :style="{zIndex:navIndex}">
+                <div><a @click="previousSlide"><slot name="nav-left">left</slot></a></div>
+            </div>
+            <div v-show="navigation" class="nav-right" :style="{zIndex:navIndex}">
+                <div><a @click="nextSlide"><slot name="nav-right">right</slot></a></div>
+            </div>
+            <div class="pagination"></div>
+        </div>
     </div>
 </template>
 <script>
 export default {
-    data(){
+    data:function(){
         return {
+            navIndex:1,
+            navigation:true,
             parent:null,
             contents:[],
             ghost:null,
             width:0,
-            height:0
+            height:0,
+            dragStartX:0,
+            dragStartY:0,
+            dragDiffX:0,
+            dragDiffY:0
         }
     },
     methods:{
+        nextSlide:function(){
+            
+        },
+        previousSlide:function(){
+
+        },
         createGhost:function(){
             if(this.ghost==null){
                 this.ghost = document.createElement('div');
@@ -45,9 +66,9 @@ export default {
             content.removeChild(img);
             content.setAttribute('data-index',index);
             content.style.cssText = 'position:absolute;left:0px;top:0px;z-index:1';
-            this.loadImage(content,src,function(opt){
-                content.style.setAttribute('data-width',opt.w);
-                content.style.setAttribute('data-height',opt.h);
+            this.loadImage(content,src,function(){
+                //content.style.setAttribute('data-width',opt.w);
+                //content.style.setAttribute('data-height',opt.h);
             })
             content.style.backgroundImage = 'url('+src+')';
             content.style.backgroundRepeat = 'no-repeat';
@@ -72,8 +93,35 @@ export default {
             img.onload = function(){
                 w = img.width;
                 h = img.height;
+                content.setAttribute('data-width',w);
+                content.setAttribute('data-height',h);
                 if(done){done({w:w,h:h})}
             }
+            img.src = src;
+        },
+        createDragHandler:function(){
+            this.drag = document.createElement('div');
+            this.drag.style.cssText = 'position:absolute;z-index:'+this.contents.length+1+';top:0px;left:0px;';
+            this.drag.style.width = this.width+'px';
+            this.drag.style.height = this.height+'px';
+            this.parent.appendChild(this.drag);
+            this.drag.addEventListener('mousedown',this.dragStarted);
+        },
+        dragStarted:function(){
+            this.dragStartX = event.pageX;
+            document.addEventListener('mousemove',this.dragging);
+            document.addEventListener('mouseup',this.dragEnded)
+        },
+        dragging:function(){
+            this.dragDiffX = event.pageX - this.dragStartX;
+            console.log(event.pageX);
+        },
+        dragEnded:function(){
+            document.removeEventListener('mousemove',this.dragging)
+            document.removeEventListener('mouseup',this.dragEnded);
+            //alert(this.dragDiffX);
+            //if minus drag left
+            //if plus drag right
         }
     },
     beforeUpdate:function(){
@@ -92,6 +140,7 @@ export default {
         })
         this.createGhost();
         this.createBackgrounds();
+        this.createDragHandler();
         window.addEventListener('resize',this.resized)
         this.resized();
     },
@@ -101,5 +150,25 @@ export default {
 }
 </script>
 <style scoped>
-
+.nav-right, .nav-left{
+    position:absolute;
+    top:0px;
+    bottom:0px;
+    display:table;
+    height:100%;
+}
+.nav-left{
+    left:10px;
+}
+.nav-left>div{
+    display:table-cell;
+    vertical-align:middle;
+}
+.nav-right{
+    right:10px;
+}
+.nav-right>div{
+    display:table-cell;
+    vertical-align:middle;
+}
 </style>
