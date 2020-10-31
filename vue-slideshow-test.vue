@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <vueslideshow>
+        <vueslideshow ref="slideshow" :heightResizer="heightResize" v-bind:params="slideshowParams">
             
                 <div class="content" v-bind:key="image" v-for="image in images">
                     <img :src="image" />
@@ -9,7 +9,7 @@
             
         </vueslideshow>
         <br />
-        <button @click="addContent">Add</button>
+        <button @click="addContent">Add</button>&nbsp;<button @click="fullScreen">Full</button>
     </div>
 </template>
 <script>
@@ -17,6 +17,21 @@ import vueslideshow from './vue-slideshow'
 export default{
     data(){
         return {
+            slideshowParams:{
+                autoplay:true,
+                minHeight:360,
+                thumbs:{
+                    visible:true,
+                    height:70,
+                    width:100
+                },
+                nav:{
+                    visible:true
+                },
+                pager:{
+                    visible:true
+                }
+            },
             images:[
                 'https://media.publit.io/file/islands/1.jpg',
                 'https://media.publit.io/file/islands/2.jpg',
@@ -25,10 +40,21 @@ export default{
         }
     },
     methods:{
-        addContent(){
+        heightResize:function( instance ){
+            return instance.getHeight() - this.slideshowParams.thumbs.height
+        },
+        addContent:function(){
             this.images.push('https://media.publit.io/file/islands/'+(this.images.length+1)+'.jpg');
+        },
+        fullScreen:function(){
+            this.$refs['slideshow'].fullScreen();
         }
     },
     components:{vueslideshow}
 }
 </script>
+<style >
+body{
+    margin:0;padding:0;
+}
+</style>
