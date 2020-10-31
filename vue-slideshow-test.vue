@@ -18,7 +18,8 @@ export default{
     data(){
         return {
             slideshowParams:{
-                autoplay:true,
+                autoplay:false,
+                animation:'fade',
                 minHeight:360,
                 thumbs:{
                     visible:true,

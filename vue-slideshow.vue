@@ -62,6 +62,7 @@ export default {
     },
     data:function(){
         return {
+            previous_autoplay:false,
             animating:false,
             animating_timeout:0,
 
@@ -143,7 +144,62 @@ export default {
     },
 
     methods:{
+        slideLeft:function(elem,to,final,done){
+            //var distance = 0;
+            var nowt = (new Date()).getTime();
+            //console.log('final',final);
+            var from = parseFloat(elem.style.left.replace('px',''));
+            var tick = ()=>{
+                var passedt = (new Date()).getTime();
+                var diff = passedt - nowt;
+                var step = final/this.speed;///final;
+                //console.log(step);
+                
+                //var eleft = parseFloat(elem.style.left.replace('px',''));
+                //console.log(eleft);
+                
+                //console.log(diff);
+                
+                elem.style.left = from - (step*diff)+'px';
+                if(this.speed>diff){
+                    window.requestAnimationFrame && window.requestAnimationFrame(tick) || setTimeout(tick,16);
+                }else{
+                    console.log(elem.style.left);
+                    elem.style.left = to+'px';
+                    done();
+                }
+            };
+            tick();
+        },
+        slideRight:function(elem,to,final,done){
+            //var distance = 0;
+            var nowt = (new Date()).getTime();
+            //console.log('final',final);
+            var from = parseFloat(elem.style.left.replace('px',''));
+            var tick = ()=>{
+                var passedt = (new Date()).getTime();
+                var diff = passedt - nowt;
+                var step = final/this.speed;///final;
+                //console.log(step);
+                
+                //var eleft = parseFloat(elem.style.left.replace('px',''));
+                //console.log(eleft);
+                
+                //console.log(diff);
+                
+                elem.style.left = from + (step*diff)+'px';
+                if(this.speed>diff){
+                    window.requestAnimationFrame && window.requestAnimationFrame(tick) || setTimeout(tick,16);
+                }else{
+                    console.log(elem.style.left);
+                    elem.style.left = to+'px';
+                    done();
+                }
+            };
+            tick();
+        },
         fadeIn:function(elem,done){
+            elem.style.left = '0px';
             elem.style.opacity = 0;
             var nowt = (new Date()).getTime();
             var tick = () =>{
@@ -152,7 +208,7 @@ export default {
                 var left = parseFloat(this.speed - diff);
                 var opacity = parseFloat(diff/1000.0) * 1000/this.speed;
                 elem.style.opacity = opacity;
-                console.log(opacity);
+                //console.log(opacity);
                 if(opacity<1){
                     window.requestAnimationFrame && window.requestAnimationFrame(tick) || setTimeout(tick,16)
                 }else{
@@ -164,6 +220,7 @@ export default {
             tick();
         },
         fadeOut:function(elem,done){
+            elem.style.left = '0px';
             elem.style.opacity = 1;
             var nowt = (new Date()).getTime();
             var tick = () =>{
@@ -172,7 +229,7 @@ export default {
                 var left = parseFloat(this.speed - diff);
                 var opacity = parseFloat(left/1000.0) * 1000/this.speed;
                 elem.style.opacity = opacity;
-                console.log(opacity);
+                //console.log(opacity);
                 if(opacity>0){
                     window.requestAnimationFrame && window.requestAnimationFrame(tick) || setTimeout(tick,16)
                 }else{
@@ -187,19 +244,42 @@ export default {
             if(this.animating){
                 return;
             }
+            this.animated_elements = 0;
+
             this.animating = true;
             var ccontent = this.contents[cindex];
             var ncontent = this.contents[nindex];
-            ccontent.style.zIndex = 2;
-            ncontent.style.zIndex = 1;
-            this.fadeOut(ccontent,this.animate_finished);
-            this.fadeIn(ncontent,this.animate_finished);
+            if(this.animation=='fade'){
+                ccontent.style.zIndex = 2;
+                ncontent.style.zIndex = 1;
+                this.fadeOut(ccontent,this.animate_finished);
+                this.fadeIn(ncontent,this.animate_finished);
+            }else if(this.animation=='slide'){
+                if(nindex>cindex){
+                    var final = this.width;
+                    var cto = this.width*-1;
+                    var nto = 0;
+                    ccontent.style.zIndex=1;
+                    ncontent.style.zIndex=2;
+                    ccontent.style.left='0px';
+                    ncontent.style.left=this.width+'px';
+                    ncontent.style.opacity = 1;
+                    this.slideLeft(ccontent,cto,final,this.animate_finished);
+                    this.slideLeft(ncontent,nto,final,this.animate_finished);
+                }else{
+                    ccontent.style.left='0px';
+                    ncontent.style.left=this.width*-1+'px';
+                    ncontent.style.opacity=1;
+                    this.slideRight(ccontent,this.width,this.width,this.animate_finished);
+                    this.slideRight(ncontent,0,this.width,this.animate_finished);
+                }
+            }
         },
         animate_finished:function(){
             this.animated_elements++;
             if(this.animated_elements==2){
                 //move to next one
-                this.animated_elements=0;
+                //this.animated_elements=0;
                 this.animating = false;
                 var cindex = this.slideIndex;
                 var nindex = cindex+1>this.contents.length-1?0:cindex+1;
@@ -375,15 +455,84 @@ export default {
             this.drag.addEventListener('mousedown',this.dragStarted);
         },
         dragStarted:function(){
+            if(this.animating){
+                return;
+            }
+            this.previous_autoplay = this.autoplay;
+            this.params.autoplay = false;
+            clearTimeout(this.animating_timeout);
+            //pause animation
             this.dragStartX = event.pageX;
             document.addEventListener('mousemove',this.dragging);
             document.addEventListener('mouseup',this.dragEnded)
         },
         dragging:function(){
             this.dragDiffX = event.pageX - this.dragStartX;
-            console.log(event.pageX);
+            //console.log(this.dragDiffX);
+            var dragDiffX = Math.abs(dragDiffX);
+            var ccontent = this.contents[this.slideIndex];
+            ccontent.style.left = this.dragDiffX+'px';
+            ccontent.style.left = this.dragDiffX+'px';
+            if(this.dragDiffX<0){
+                if(this.slideIndex+1<=this.contents.length-1){
+                    var ncontent = this.contents[this.slideIndex+1];
+                    ncontent.style.opacity = 1;
+                    ncontent.style.left = this.width+this.dragDiffX+'px'
+                }
+            }else{
+                if(this.slideIndex-1>=0){
+                    var pcontent = this.contents[this.slideIndex-1];
+                    pcontent.style.opacity = 1;
+                    pcontent.style.left = (this.width*-1)+this.dragDiffX+'px';
+                }
+            }      
         },
         dragEnded:function(){
+            this.params.autoplay = this.previous_autoplay;
+            //this.dragDiffX = event.pageX - this.dragStartX;
+            console.log(this.dragDiffX);
+            var moved_enought = Math.abs(this.dragDiffX)>(this.width/4)?true:false;
+            if(moved_enought){
+                //alert(true);
+                if(this.dragDiffX<0){
+                    //we need to move left
+                    var cindex = this.slideIndex;
+                    if(cindex+1<=this.contents.length-1){
+                        var nindex = cindex+1;
+                        var ccontent = this.contents[cindex];
+                        var ncontent = this.contents[nindex];
+                        this.slideIndex = nindex;
+                        this.slideLeft(ccontent,this.width*-1,this.width-Math.abs(this.dragDiffX),this.animate_finished);
+                        this.slideLeft(ncontent,0,this.width-Math.abs(this.dragDiffX),this.animate_finished);
+                    }
+                }else if(this.dragDiffX>0){
+                    var cindex2 = this.slideIndex;
+                    if(cindex2-1>=0){
+                        var nindex2 = cindex2-1;
+                        var ccontent2 = this.contents[cindex2];
+                        var ncontent2 = this.contents[nindex2];
+                        this.slideIndex = nindex2;
+                        this.slideRight(ccontent2,this.width,this.width-Math.abs(this.dragDiffX),this.animate_finished);
+                        this.slideRight(ncontent2,0,this.width-Math.abs(this.dragDiffX),this.animate_finished);
+                    }
+                }
+            }else{
+                //return back
+                
+            }
+            /**
+            if(this.autoplay){
+                this.animating = false;
+                var cindex = this.slideIndex;
+                var nindex = cindex+1>this.contents.length-1?0:cindex+1;
+                if(this.autoplay){
+                    this.animating_timeout = setTimeout(()=>{
+                        this.slideIndex = nindex;
+                        this.animate(cindex,nindex);
+                    },this.timeout)
+                }
+            }
+            **/
             document.removeEventListener('mousemove',this.dragging)
             document.removeEventListener('mouseup',this.dragEnded);
         },
@@ -447,7 +596,7 @@ export default {
         
         this.$el.style.cssText = 'position:relative';
         this.parent = this.$el.querySelector('div:first-child');
-        this.parent.style.cssText = 'position:relative;';
+        this.parent.style.cssText = 'position:relative;overflow:hidden';
         var children = this.$el.querySelectorAll('.content');
         [].forEach.call(children,(elem)=>{
             this.contents.push(elem);
