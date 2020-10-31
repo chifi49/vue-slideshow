@@ -2,21 +2,29 @@
     <div tabindex="-1" :style="{'outline-color':'transparent','position':'relative',backgroundColor:backgroundColor}">
         <div class="container" style="overflow:hidden;">
             <slot></slot>
-            <div v-show="nav" class="nav-left" :style="{zIndex:contents.length+1}">
-                <div><a @click="previousSlide" :style="{color:navArrow,'border-color':navBorder,'background-color':navBackground}"><slot name="nav-left">&#9664;</slot></a></div>
+            <div v-show="nav"  :style="{zIndex:contents.length+1, 'left':'10px', 'position':'absolute','top':'0px','bottom':'0px','display':'table','height':'100%'}">
+                <div style='display:table-cell;vertical-align:middle;'>
+                    <a @click="previousSlide" :style="{color:navArrow,'border-color':navBorder,'background-color':navBackground, 'border':'solid 1px','padding':'5px 9px','cursor':'pointer'}">
+                        <slot name="nav-left">&#9664;</slot>
+                    </a>
+                </div>
             </div>
-            <div v-show="nav" class="nav-right" :style="{zIndex:contents.length+1}">
-                <div><a @click="nextSlide" :style="{color:navArrow,'border-color':navBorder,'background-color':navBackground}"><slot name="nav-right" >&#9654;</slot></a></div>
+            <div v-show="nav"  :style="{zIndex:contents.length+1, 'right':'10px','position':'absolute','top':'0px','bottom':'0px','display':'table','height':'100%'}">
+                <div style='display:table-cell;vertical-align:middle;'>
+                    <a @click="nextSlide" :style="{color:navArrow,'border-color':navBorder,'background-color':navBackground,  'border':'solid 1px #fff','padding':'5px 9px','cursor':'pointer'}">
+                        <slot name="nav-right" >&#9654;</slot>
+                    </a>
+                </div>
             </div>
-            <div class="pagination" v-show="pager" :style="{zIndex:contents.length+1}">
-                <a v-for="(page,i) in contents" :style="{'background-color':i==slideIndex?pagerBackground:'transparent'}" v-bind:key="'page'+i" @click="selectPage(i)"></a>
+            <div class="pagination" v-show="pager" :style="{zIndex:contents.length+1, 'position':'absolute','bottom':'10px','left':'0px','width':'100%','text-align':'center'}">
+                <a v-for="(page,i) in contents" :style="{'background-color':i==slideIndex?pagerBackground:'transparent','display':'inline-block','border':'solid 1px '+pagerBorder,'border-radius':'12px','height':pagerSize+'px','width':pagerSize+'px','margin-left':'2px','margin-right':'2px','cursor':'pointer' }" v-bind:key="'page'+i" @click="selectPage(i)"></a>
             </div>
-            <a class="fullscreen" @click="fullScreen" v-show="fullscreen" :style="{zIndex:contents.length+1}">
+            <a class="fullscreen" @click="fullScreen" v-show="fullscreen" :style="{zIndex:contents.length+1,'position':'absolute','top':'20px','right':'20px','color':'#fff','font-size':'21px','cursor':'pointer'}">
                 <slot name="fullscreen">
                     &#8599;
-                    <span>&#8601;</span>
-                    <span class="fullscreen2">&#8599;</span>
-                    <span class="fullscreen3">&#8601;</span>
+                    <span style='position:absolute;top:0px;left:0px;'>&#8601;</span>
+                    <span style='position:absolute;top:1px;left:-1px;transform:rotate(-90deg)' >&#8599;</span>
+                    <span style='position:absolute;top:1px;left:-1px;transform:rotate(-90deg)' >&#8601;</span>
                 </slot>
             </a>
             
@@ -39,8 +47,7 @@ export default {
     props:{
         params:{
             type:Object,
-            default:function(p){
-                console.log(p);
+            default:function(){
                 return{
                     autoplay: true,
                     backgroundColor:'#000',
@@ -61,7 +68,11 @@ export default {
                         arrowColor:'#fff'
                     },
                     pager:{
-                        visible:false
+                        visible:false,
+                        position:{
+                            bottom:10,
+                            left:0
+                        }
                     }
                 }
             }
@@ -111,6 +122,12 @@ export default {
         thumbsBorder:function(){
             return this.params && this.params.thumbs && this.params.thumbs.borderColor?this.params.thumbs.borderColor:'#fff';
         },
+        pagerSize:function(){
+            return this.params && this.params.pager && this.params.pager.size?this.params.pager.size:12;
+        },
+        pagerBorder:function(){
+            return this.params && this.params.pager && this.params.pager.borderColor?this.params.pager.borderColor:'#fff';
+        },
         pagerBackground:function(){
             return this.params && this.params.pager && this.params.pager.backgroundColor?this.params.pager.backgroundColor:'#fff';
         },
@@ -158,7 +175,7 @@ export default {
             if(this.params && this.params.minHeight && this.params.minHeight>heighttmp){
                 heighttmp = this.params.minHeight;
             }
-            console.log('height',heighttmp);
+            //console.log('height',heighttmp);
             return heighttmp;
         }
     },
@@ -178,7 +195,7 @@ export default {
                 if(this.speed>diff){
                     window.requestAnimationFrame && window.requestAnimationFrame(tick) || setTimeout(tick,16);
                 }else{
-                    console.log(elem.style.left);
+                    //console.log(elem.style.left);
                     elem.style.left = to+'px';
                     done();
                 }
@@ -199,7 +216,7 @@ export default {
                 if(this.speed>diff){
                     window.requestAnimationFrame && window.requestAnimationFrame(tick) || setTimeout(tick,16);
                 }else{
-                    console.log(elem.style.left);
+                    //console.log(elem.style.left);
                     elem.style.left = to+'px';
                     done();
                 }
@@ -666,11 +683,11 @@ export default {
             this.$nextTick(()=>{
                 var contents = me.$el.querySelectorAll('.content');
                 
-                console.log('length',contents.length);
+                //console.log('length',contents.length);
                 [].forEach.call(contents,function(elem){
-                    console.log(elem.getAttribute('data-init'));
+                    //console.log(elem.getAttribute('data-init'));
                     if(elem.getAttribute('data-init')==null){
-                        console.log('found',elem);
+                        //console.log('found',elem);
                         me.contents.push(elem);
                     }
                 })
@@ -706,69 +723,3 @@ export default {
     }
 }
 </script>
-<style scoped>
-.nav-right, .nav-left{
-    position:absolute;
-    top:0px;
-    bottom:0px;
-    display:table;
-    height:100%;
-    
-}
-.nav-right a, .nav-left a{
-    border:solid 1px #fff;
-    padding:5px 9px;
-    cursor:pointer;
-}
-.nav-left{
-    left:10px;
-}
-.nav-left>div{
-    display:table-cell;
-    vertical-align:middle;
-}
-.nav-right{
-    right:10px;
-}
-.nav-right>div{
-    display:table-cell;
-    vertical-align:middle;
-}
-.pagination{
-    position:absolute;
-    bottom:10px;
-    left:0px;
-    width:100%;
-    text-align:center;
-}
-.pagination>a{
-    display:inline-block;
-    border:solid 1px #fff;
-    border-radius:12px;
-    height:12px;
-    width:12px;
-    margin-left:2px;
-    margin-right:2px;
-    cursor:pointer;
-}
-.pagination>a.selected{
-    background-color:#fff;
-}
-.fullscreen{
-    position:absolute;
-    top:20px;
-    right:20px;
-    color:#fff;
-    font-size:21px;
-    cursor:pointer;
-}
-.fullscreen span{
-    position:absolute;
-    top:0px;left:0px;
-}
-.fullscreen .fullscreen2, .fullscreen .fullscreen3{
-    position:absolute;
-    transform:rotate(-90deg);
-    top:1px;left:-1px;
-}
-</style>
