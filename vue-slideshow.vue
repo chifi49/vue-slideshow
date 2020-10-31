@@ -1,5 +1,5 @@
 <template>
-    <div tabindex="-1" style="outline-color:transparent;position:relative;">
+    <div tabindex="-1" :style="{'outline-color':'transparent','position':'relative',backgroundColor:backgroundColor}">
         <div class="container" style="overflow:hidden;">
             <slot></slot>
             <div v-show="nav" class="nav-left" :style="{zIndex:contents.length+1}">
@@ -11,6 +11,14 @@
             <div class="pagination" v-show="pager" :style="{zIndex:contents.length+1}">
                 <a v-for="(page,i) in contents" :style="{'background-color':i==slideIndex?pagerBackground:'transparent'}" v-bind:key="'page'+i" @click="selectPage(i)"></a>
             </div>
+            <a class="fullscreen" @click="fullScreen" v-show="fullscreen" :style="{zIndex:contents.length+1}">
+                <slot name="fullscreen">
+                    &#8599;
+                    <span>&#8601;</span>
+                    <span class="fullscreen2">&#8599;</span>
+                    <span class="fullscreen3">&#8601;</span>
+                </slot>
+            </a>
             
         </div>
 
@@ -35,6 +43,8 @@ export default {
                 console.log(p);
                 return{
                     autoplay: true,
+                    backgroundColor:'#000',
+                    imageRatio:1,
                     fullscreen:true,
                     animation:'fade',
                     speed: 750,
@@ -62,6 +72,7 @@ export default {
     },
     data:function(){
         return {
+            isDragging:false,
             previous_autoplay:false,
             animating:false,
             animating_timeout:0,
@@ -85,6 +96,15 @@ export default {
         }
     },
     computed:{
+        backgroundColor:function(){
+            return this.params && this.params.backgroundColor?this.params.backgroundColor:'#000';
+        },
+        imageratio:function(){
+            return this.params && this.params.imageRatio?this.params.imageRatio:1;
+        },
+        fullscreen:function(){
+            return this.params && typeof this.params.fullscreen!=='undefined'?this.params.fullscreen:true;
+        },
         thumbsSelectedBorder:function(){
             return this.params && this.params.thumbs && this.params.thumbs.selectedBorderColor?this.params.thumbs.selectedBorderColor:'#000';
         },
@@ -153,12 +173,6 @@ export default {
                 var passedt = (new Date()).getTime();
                 var diff = passedt - nowt;
                 var step = final/this.speed;///final;
-                //console.log(step);
-                
-                //var eleft = parseFloat(elem.style.left.replace('px',''));
-                //console.log(eleft);
-                
-                //console.log(diff);
                 
                 elem.style.left = from - (step*diff)+'px';
                 if(this.speed>diff){
@@ -180,12 +194,6 @@ export default {
                 var passedt = (new Date()).getTime();
                 var diff = passedt - nowt;
                 var step = final/this.speed;///final;
-                //console.log(step);
-                
-                //var eleft = parseFloat(elem.style.left.replace('px',''));
-                //console.log(eleft);
-                
-                //console.log(diff);
                 
                 elem.style.left = from + (step*diff)+'px';
                 if(this.speed>diff){
@@ -208,7 +216,7 @@ export default {
                 var left = parseFloat(this.speed - diff);
                 var opacity = parseFloat(diff/1000.0) * 1000/this.speed;
                 elem.style.opacity = opacity;
-                //console.log(opacity);
+                
                 if(opacity<1){
                     window.requestAnimationFrame && window.requestAnimationFrame(tick) || setTimeout(tick,16)
                 }else{
@@ -229,7 +237,7 @@ export default {
                 var left = parseFloat(this.speed - diff);
                 var opacity = parseFloat(left/1000.0) * 1000/this.speed;
                 elem.style.opacity = opacity;
-                //console.log(opacity);
+                
                 if(opacity>0){
                     window.requestAnimationFrame && window.requestAnimationFrame(tick) || setTimeout(tick,16)
                 }else{
@@ -295,8 +303,12 @@ export default {
             return this.$el;
         },
         fullScreen:function(){
-            if(this.$el.requestFullscreen){
-                this.$el.requestFullscreen();
+            if(this.isFullScreen){
+                document.exitFullscreen();
+            }else{
+                if(this.$el.requestFullscreen){
+                    this.$el.requestFullscreen();
+                }
             }
         },
         moveTo:function(index){
@@ -392,6 +404,7 @@ export default {
             })
             content.style.backgroundImage = 'url('+src+')';
             content.style.backgroundRepeat = 'no-repeat';
+
             content.style.backgroundSize ='cover';
             content.style.backgroundPosition = 'center';
 
@@ -438,6 +451,10 @@ export default {
                     position = 'vertical';
                 }
                 var index = parseInt(content.getAttribute('data-index'));
+                //console.log('ratio',me.imageratio);
+                if( (position=='vertical' && me.imageratio==1) || me.imageratio==2){
+                    content.style.backgroundSize='auto 100%';
+                }
                 if(index==0){
                     me.init();
                 }
@@ -469,75 +486,147 @@ export default {
         dragging:function(){
             this.dragDiffX = event.pageX - this.dragStartX;
             //console.log(this.dragDiffX);
-            var dragDiffX = Math.abs(dragDiffX);
-            var ccontent = this.contents[this.slideIndex];
-            ccontent.style.left = this.dragDiffX+'px';
-            ccontent.style.left = this.dragDiffX+'px';
-            if(this.dragDiffX<0){
-                if(this.slideIndex+1<=this.contents.length-1){
-                    var ncontent = this.contents[this.slideIndex+1];
-                    ncontent.style.opacity = 1;
-                    ncontent.style.left = this.width+this.dragDiffX+'px'
-                }
+            var dragDiffX = Math.abs(this.dragDiffX);
+            if(dragDiffX>20){
+                this.isDragging=true;
+
+                
+                var ccontent = this.contents[this.slideIndex];
+                ccontent.style.left = this.dragDiffX+'px';
+                //ccontent.style.left = this.dragDiffX+'px';
+                if(this.dragDiffX<0){
+                    if(this.slideIndex+1<=this.contents.length-1){
+                        var ncontent = this.contents[this.slideIndex+1];
+                        ncontent.style.opacity = 1;
+                        ncontent.style.left = this.width+this.dragDiffX+'px'
+                    }
+                }else{
+                    if(this.slideIndex-1>=0){
+                        var pcontent = this.contents[this.slideIndex-1];
+                        pcontent.style.opacity = 1;
+                        pcontent.style.left = (this.width*-1)+this.dragDiffX+'px';
+                    }
+                }     
             }else{
-                if(this.slideIndex-1>=0){
-                    var pcontent = this.contents[this.slideIndex-1];
-                    pcontent.style.opacity = 1;
-                    pcontent.style.left = (this.width*-1)+this.dragDiffX+'px';
-                }
-            }      
+                this.isDragging=false;
+            }
         },
         dragEnded:function(){
+            var animated=false;
+            this.animated_elements=0;
             this.params.autoplay = this.previous_autoplay;
-            //this.dragDiffX = event.pageX - this.dragStartX;
-            console.log(this.dragDiffX);
-            var moved_enought = Math.abs(this.dragDiffX)>(this.width/4)?true:false;
-            if(moved_enought){
-                //alert(true);
+
+            if(this.isDragging){
+                
+                
+                console.log(this.params.autoplay);
+                //this.dragDiffX = event.pageX - this.dragStartX;
+                //console.log(this.dragDiffX);
+                var moved_enought = Math.abs(this.dragDiffX)>(this.width/4)?true:false;
+                
+                if(moved_enought){
+                    //alert(true);
+                    if(this.dragDiffX<0){
+                        //we need to move left
+                        var cindex = this.slideIndex;
+                        if(cindex+1<=this.contents.length-1){
+                            animated=true;
+                            var nindex = cindex+1;
+                            var ccontent = this.contents[cindex];
+                            var ncontent = this.contents[nindex];
+                            this.slideIndex = nindex;
+                            this.slideLeft(ccontent,this.width*-1,this.width-Math.abs(this.dragDiffX),this.animate_finished);
+                            this.slideLeft(ncontent,0,this.width-Math.abs(this.dragDiffX),this.animate_finished);
+                        }else{
+                            animated=true;
+                            this.slideRight(this.contents[cindex],0,Math.abs(this.dragDiffX),this.animate_finished);
+                            this.animate_finished();
+                        }
+                    }else if(this.dragDiffX>0){
+                        var cindex2 = this.slideIndex;
+                        if(cindex2-1>=0){
+                            animated=true;
+                            var nindex2 = cindex2-1;
+                            var ccontent2 = this.contents[cindex2];
+                            var ncontent2 = this.contents[nindex2];
+                            this.slideIndex = nindex2;
+                            this.slideRight(ccontent2,this.width,this.width-Math.abs(this.dragDiffX),this.animate_finished);
+                            this.slideRight(ncontent2,0,this.width-Math.abs(this.dragDiffX),this.animate_finished);
+                        }else{
+                            animated=true;
+                            //this.slideRight(this.contents[cindex2],0,this.width-Math.abs(this.dragDiffX),this.animate_finished);
+                            //this.animate_finished();
+                            //alert(true);
+                            this.slideLeft(this.contents[cindex2],0,Math.abs(this.dragDiffX),this.animate_finished);
+                        
+                            this.animate_finished();
+                        }
+                    }
+
+                }else{
+                    //return back
+                    if(this.dragDiffX<0){
+                        //we need to move right
+                        var cindex3 = this.slideIndex;
+                        if(cindex3+1<=this.contents.length-1){
+                            animated=true;
+                            var nindex3 = cindex3+1;
+                            var ccontent3 = this.contents[cindex3];
+                            var ncontent3 = this.contents[nindex3];
+                            //this.slideIndex = nindex;
+                            this.slideRight(ccontent3,0,Math.abs(this.dragDiffX),this.animate_finished);
+                            this.slideRight(ncontent3,this.width,Math.abs(this.dragDiffX),this.animate_finished);
+                        }else{
+                            animated=true;
+                            this.slideRight(this.contents[cindex3],0,Math.abs(this.dragDiffX), this.animate_finished);
+                            this.animate_finished();
+                        }
+                    }else if(this.dragDiffX>0){
+                        var cindex4 = this.slideIndex;
+                        if(cindex4-1>=0){
+                            animated=true;
+                            var nindex4 = cindex4-1;
+                            var ccontent4 = this.contents[cindex4];
+                            var ncontent4 = this.contents[nindex4];
+                        // this.slideIndex = nindex2;
+                            this.slideLeft(ccontent4,0,Math.abs(this.dragDiffX),this.animate_finished);
+                            this.slideLeft(ncontent4,this.width*-1,Math.abs(this.dragDiffX),this.animate_finished);
+                        }else{
+                            animated=true;
+                            this.slideLeft(this.contents[cindex4],0,Math.abs(this.dragDiffX),this.animate_finished);
+                            this.animate_finished();
+                        }
+                    }
+                }
+                
+            }else{
+                var cindex_1 = this.slideIndex;
+                var ccontent_1 = this.contents[cindex_1];
+                ccontent_1.style.left='0px';
                 if(this.dragDiffX<0){
-                    //we need to move left
-                    var cindex = this.slideIndex;
-                    if(cindex+1<=this.contents.length-1){
-                        var nindex = cindex+1;
-                        var ccontent = this.contents[cindex];
-                        var ncontent = this.contents[nindex];
-                        this.slideIndex = nindex;
-                        this.slideLeft(ccontent,this.width*-1,this.width-Math.abs(this.dragDiffX),this.animate_finished);
-                        this.slideLeft(ncontent,0,this.width-Math.abs(this.dragDiffX),this.animate_finished);
+                    if(cindex_1+1<=this.contents.length-1){
+                           
+                        this.contents[cindex_1+1].style.left=this.width;
                     }
                 }else if(this.dragDiffX>0){
-                    var cindex2 = this.slideIndex;
-                    if(cindex2-1>=0){
-                        var nindex2 = cindex2-1;
-                        var ccontent2 = this.contents[cindex2];
-                        var ncontent2 = this.contents[nindex2];
-                        this.slideIndex = nindex2;
-                        this.slideRight(ccontent2,this.width,this.width-Math.abs(this.dragDiffX),this.animate_finished);
-                        this.slideRight(ncontent2,0,this.width-Math.abs(this.dragDiffX),this.animate_finished);
+                    if(cindex_1-1>=0){
+                        this.contents[cindex_1-1].style.left=this.width*-1;
                     }
                 }
-            }else{
-                //return back
-                
             }
-            /**
-            if(this.autoplay){
-                this.animating = false;
-                var cindex = this.slideIndex;
-                var nindex = cindex+1>this.contents.length-1?0:cindex+1;
-                if(this.autoplay){
-                    this.animating_timeout = setTimeout(()=>{
-                        this.slideIndex = nindex;
-                        this.animate(cindex,nindex);
-                    },this.timeout)
-                }
+            console.log(animated);
+            if(this.autoplay && !animated){
+                this.animating_timeout = setTimeout(()=>{
+                    //this.slideIndex = nindex;
+                    this.animate(cindex,nindex);
+                },this.timeout)
             }
-            **/
+            
             document.removeEventListener('mousemove',this.dragging)
             document.removeEventListener('mouseup',this.dragEnded);
         },
-        fullscreenchange:function(event){
-            if(event.srcElement==this.$el){
+        fullscreenchange:function(){
+            if(document.fullscreenElement==this.$el){
                 this.isFullScreen=true;
             }else{
                 this.isFullScreen=false;
@@ -594,7 +683,7 @@ export default {
     },
     mounted(){
         
-        this.$el.style.cssText = 'position:relative';
+        //this.$el.style.cssText = 'position:relative';
         this.parent = this.$el.querySelector('div:first-child');
         this.parent.style.cssText = 'position:relative;overflow:hidden';
         var children = this.$el.querySelectorAll('.content');
@@ -664,5 +753,22 @@ export default {
 }
 .pagination>a.selected{
     background-color:#fff;
+}
+.fullscreen{
+    position:absolute;
+    top:20px;
+    right:20px;
+    color:#fff;
+    font-size:21px;
+    cursor:pointer;
+}
+.fullscreen span{
+    position:absolute;
+    top:0px;left:0px;
+}
+.fullscreen .fullscreen2, .fullscreen .fullscreen3{
+    position:absolute;
+    transform:rotate(-90deg);
+    top:1px;left:-1px;
 }
 </style>

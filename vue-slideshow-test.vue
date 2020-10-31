@@ -18,7 +18,9 @@ export default{
     data(){
         return {
             slideshowParams:{
-                autoplay:false,
+                imageRatio:2,//0, 1 and 2
+                autoplay:true,
+                fullscreen:true,
                 animation:'fade',
                 minHeight:360,
                 thumbs:{
