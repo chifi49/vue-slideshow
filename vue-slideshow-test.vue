@@ -2,10 +2,9 @@
     <div id="app">
         <vueslideshow ref="slideshow" :heightResizer="heightResize" v-bind:params="slideshowParams">
             
-                
                 <div class="content" v-bind:key="content.image" v-for="content in contents">
                     <img :src="content.image" />
-                    <div >
+                    <div :data-pos-v="content.position.vertical" :data-pos-h="content.position.horizontal" >
                         <div>
                             <div>
                                 <template v-if="content.title">
@@ -24,11 +23,13 @@
 
                     </div>
                 </div>
-                
             
         </vueslideshow>
+
         <br />
         <button @click="addContent">Add</button>&nbsp;<button @click="fullScreen">Full</button>
+        &nbsp;<button @click="hideThumbs">Hide Thumbs</button>&nbsp;<button @click="showThumbs">Show Thumbs</button>
+        &nbsp;<button @click="thirdSlide">3rd Slide</button>
     </div>
 </template>
 <script>
@@ -69,14 +70,22 @@ export default{
                     buttons:[
                         {text:'next',action:'nextSlide'}
                     ], 
-                    image:'https://media.publit.io/file/islands/1.jpg' 
+                    image:'https://media.publit.io/file/islands/1.jpg',
+                    position:{
+                        vertical:'middle',
+                        horizontal:'center'
+                    }
                 },
                 {
                     title:'howdy?', subtitle:'did you go?', body:'everything ok?', 
                     buttons:[
                         {text:'previous',action:'previousSlide'},{text:'next',action:'nextSlide'}
                     ], 
-                    image:'https://media.publit.io/file/islands/2.jpg' 
+                    image:'https://media.publit.io/file/islands/2.jpg' ,
+                    position:{
+                        vertical:'top',
+                        horizontal:'left'
+                    }
                 }
                 ,
                 {
@@ -84,7 +93,11 @@ export default{
                     buttons:[
                         {text:'yes',action:'firstSlide'},{text:'no',action:'lastSlide'}
                     ], 
-                    image:'https://media.publit.io/file/islands/3.jpg' 
+                    image:'https://media.publit.io/file/islands/3.jpg' ,
+                    position:{
+                        vertical:'middle',
+                        horizontal:'center'
+                    }
                 }
                 ,
                 {
@@ -92,7 +105,11 @@ export default{
                     buttons:[
                         {text:'yes',action:'previousSlide'},{text:'no',action:'nextSlide'}
                     ], 
-                    image:'https://media.publit.io/file/islands/4.jpg' 
+                    image:'https://media.publit.io/file/islands/4.jpg' ,
+                    position:{
+                        vertical:'bottom',
+                        horizontal:'center'
+                    }
                 }
                 
             ]
@@ -106,7 +123,19 @@ export default{
             return instance.getHeight() - this.slideshowParams.thumbs.height
         },
         addContent:function(){
-            this.images.push('https://media.publit.io/file/islands/'+(this.images.length+1)+'.jpg');
+            //this.images.push('https://media.publit.io/file/islands/'+(this.images.length+1)+'.jpg');
+            this.contents.push({
+                image:'https://media.publit.io/file/islands/'+(this.contents.length+1)+'.jpg'
+            })
+        },
+        hideThumbs:function(){
+            this.slideshowParams.thumbs.visible=false;
+        },
+        showThumbs:function(){
+            this.slideshowParams.thumbs.visible=true;
+        },
+        thirdSlide:function(){
+            this.$refs['slideshow'].slideTo(3);
         },
         fullScreen:function(){
             this.$refs['slideshow'].fullScreen();

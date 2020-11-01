@@ -349,12 +349,19 @@ export default {
                 }
             }
         },
+        slideTo:function(index){
+            if(index-1>=0 && index-1<=this.contents.length-1){
+                this.moveTo(index-1);
+            }
+        },
         moveTo:function(index){
+            
             clearTimeout(this.animating_timeout);
             var cindex = this.slideIndex;
             var nindex = parseInt(index);
             this.slideIndex = nindex;
             this.animate(cindex,nindex);
+        
         },
         selectPage:function(index){
             //var content = this.contents[index];
@@ -498,21 +505,6 @@ export default {
                 divme.style.position='relative';
                 divme.style.zIndex=this.contents.length+1;
                 
-                /**
-                var card = document.createElement('div');
-                card.style.cssText = 'display:table;height:100%;width:100%;';
-                card.style.textAlign=posh;
-                var cell = document.createElement('div');
-                cell.style.cssText = 'display:table-cell;';
-                cell.style.verticalAlign= posv;
-                var text = document.createElement('div');
-                text.style.cssText = 'position:relative;display:inline-block;z-index:'+this.contents.length+1+';';
-                text.innerHTML = child.innerHTML;
-                cell.appendChild(text);
-                //card.appendChild(cell);
-                //content.removeChild(child);
-                //content.appendChild(card);
-                **/
             }
 
             this.image_paths.push(src);
@@ -570,6 +562,9 @@ export default {
             //this.drag.style.width = this.width+'px';
             //this.drag.style.height = this.correctHeight+'px';
             this.parent.appendChild(this.drag);
+            this.drag.addEventListener('click',function(event){
+                event.preventDefault();
+            })
             this.drag.addEventListener('mousedown',this.dragStarted);
         },
         dragStarted:function(){
@@ -580,6 +575,7 @@ export default {
             this.params.autoplay = false;
             clearTimeout(this.animating_timeout);
             //pause animation
+            this.isDragging = false;
             this.dragStartX = event.pageX;
             document.addEventListener('mousemove',this.dragging);
             document.addEventListener('mouseup',this.dragEnded)
