@@ -3,7 +3,9 @@ A content/image slideshow with touch support and fade/slide effect made with vue
 
 ## Installation
 `npm install --save @chifi49/vue-slideshow`
+
 or
+
 `<script src="vue-slideshow.umd.min.js"></script>`
 
 ## Usage
