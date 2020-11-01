@@ -55,3 +55,31 @@ export default{
 </script>
 
 ```
+
+### Methods
+```
+<vueslideshow ref="slider">
+......
+</vueslideshow>
+
+var slider = this.$refs['slider'];
+
+```
+
+#### nextSlide
+`slider.nextSlide()`
+#### previousSlide
+`slider.previousSlide()`
+#### firstSlide
+`slider.firstSlide()`
+#### lastSlide
+`slider.lastSlide()`
+#### moveTo
+`slider.moveTo(3)` move to 3rd slide
+#### showThumbs
+`slider.showThumbs()`
+#### hideThumbs
+`slider.hideThumbs()`
+#### fullScreen
+`slider.fullScreen()`
+
