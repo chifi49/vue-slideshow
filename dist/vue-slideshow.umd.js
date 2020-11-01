@@ -603,12 +603,12 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: /Users/fisigma/.nvm/versions/node/v12.16.1/lib/node_modules/@vue/cli-service-global/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"10c666c2-vue-loader-template"}!/Users/fisigma/.nvm/versions/node/v12.16.1/lib/node_modules/@vue/cli-service-global/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/fisigma/.nvm/versions/node/v12.16.1/lib/node_modules/@vue/cli-service-global/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/fisigma/.nvm/versions/node/v12.16.1/lib/node_modules/@vue/cli-service-global/node_modules/vue-loader/lib??vue-loader-options!./vue-slideshow.vue?vue&type=template&id=44e04e74&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{style:({'outline-color':'transparent','position':'relative',backgroundColor:_vm.backgroundColor}),attrs:{"tabindex":"-1"}},[_c('div',{staticClass:"container",staticStyle:{"overflow":"hidden"}},[_vm._t("default"),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.nav),expression:"nav"}],style:({zIndex:_vm.contents.length+1, 'left':'10px', 'position':'absolute','top':'0px','bottom':'0px','display':'table','height':'100%'})},[_c('div',{staticStyle:{"display":"table-cell","vertical-align":"middle"}},[_c('a',{style:({color:_vm.navArrow,'border-color':_vm.navBorder,'background-color':_vm.navBackground, 'border':'solid 1px','padding':'5px 9px','cursor':'pointer'}),on:{"click":_vm.previousSlide}},[_vm._t("nav-left",[_vm._v("◀")])],2)])]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.nav),expression:"nav"}],style:({zIndex:_vm.contents.length+1, 'right':'10px','position':'absolute','top':'0px','bottom':'0px','display':'table','height':'100%'})},[_c('div',{staticStyle:{"display":"table-cell","vertical-align":"middle"}},[_c('a',{style:({color:_vm.navArrow,'border-color':_vm.navBorder,'background-color':_vm.navBackground,  'border':'solid 1px #fff','padding':'5px 9px','cursor':'pointer'}),on:{"click":_vm.nextSlide}},[_vm._t("nav-right",[_vm._v("▶")])],2)])]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.pager),expression:"pager"}],staticClass:"pagination",style:({zIndex:_vm.contents.length+1, 'position':'absolute','bottom':'10px','left':'0px','width':_vm.pagerWidth,'text-align':'center','height':_vm.pagerHeight})},_vm._l((_vm.contents),function(page,i){return _c('a',{key:'page'+i,style:({'background-color':i==_vm.slideIndex?_vm.pagerBackground:'transparent','display':'inline-block','border':'solid 1px '+_vm.pagerBorder,'border-radius':'12px','height':_vm.pagerSize+'px','width':_vm.pagerSize+'px','margin-left':'2px','margin-right':'2px','cursor':'pointer' }),on:{"click":function($event){return _vm.selectPage(i)}}})}),0),_c('a',{directives:[{name:"show",rawName:"v-show",value:(_vm.fullscreen),expression:"fullscreen"}],staticClass:"fullscreen",style:({zIndex:_vm.contents.length+1,'position':'absolute','top':'20px','right':'20px','color':'#fff','font-size':'21px','cursor':'pointer'}),on:{"click":_vm.fullScreen}},[_vm._t("fullscreen",[_vm._v(" ↗ "),_c('span',{staticStyle:{"position":"absolute","top":"0px","left":"0px"}},[_vm._v("↙")]),_c('span',{staticStyle:{"position":"absolute","top":"1px","left":"-1px","transform":"rotate(-90deg)"}},[_vm._v("↗")]),_c('span',{staticStyle:{"position":"absolute","top":"1px","left":"-1px","transform":"rotate(-90deg)"}},[_vm._v("↙")])])],2)],2),(_vm.thumbs)?_c('div',{staticClass:"thumbnails",style:({'position':'relative','width':'100%','overflow-x':'hidden','height':_vm.params.thumbs.height+'px',backgroundColor: _vm.thumbsBackground})},[_c('table',{staticStyle:{"position":"absolute","top":"0px","left":"0px","border-style":"none","padding":"0","margin":"0","border-spacing":"0","border":"none"}},[_c('tr',_vm._l((_vm.thumb_paths),function(src,index){return _c('td',{key:src,staticStyle:{"padding":"0","margin":"0","box-sizing":"border-box","border-spacing":"0"},attrs:{"cellpadding":"0","cellspacing":"0","data-x":_vm.params.thumbs.height*index,"data-index":index}},[_c('div',{style:({'cursor':'pointer','background-image':'url('+src+')','background-repeat':'no-repeat','background-size':'cover','width':_vm.params.thumbs.width+'px','height':_vm.params.thumbs.height+'px','box-sizing':'border-box','border-style':'solid','border-width':'2px','border-color':index==_vm.slideIndex?_vm.thumbsSelectedBorder:_vm.thumbsBorder}),on:{"click":function($event){return _vm.selectThumb(index)}}})])}),0)])]):_vm._e()])}
+// CONCATENATED MODULE: /Users/fisigma/.nvm/versions/node/v12.16.1/lib/node_modules/@vue/cli-service-global/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"10c666c2-vue-loader-template"}!/Users/fisigma/.nvm/versions/node/v12.16.1/lib/node_modules/@vue/cli-service-global/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/fisigma/.nvm/versions/node/v12.16.1/lib/node_modules/@vue/cli-service-global/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/fisigma/.nvm/versions/node/v12.16.1/lib/node_modules/@vue/cli-service-global/node_modules/vue-loader/lib??vue-loader-options!./vue-slideshow.vue?vue&type=template&id=44dc3d98&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{style:({'outline-color':'transparent','position':'relative',backgroundColor:_vm.backgroundColor}),attrs:{"tabindex":"-1"}},[_c('div',{staticClass:"container",staticStyle:{"overflow":"hidden"}},[_vm._t("default"),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.nav),expression:"nav"}],style:({zIndex:_vm.contents.length+1, 'left':'10px', 'position':'absolute','top':'0px','bottom':'0px','display':'table','height':'100%'})},[_c('div',{staticStyle:{"display":"table-cell","vertical-align":"middle"}},[_c('a',{style:({color:_vm.navArrow,'border-color':_vm.navBorder,'background-color':_vm.navBackground, 'border':'solid 1px','padding':'5px 9px','cursor':'pointer'}),on:{"click":_vm.previousSlide}},[_vm._t("nav-left",[_vm._v("◀")])],2)])]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.nav),expression:"nav"}],style:({zIndex:_vm.contents.length+1, 'right':'10px','position':'absolute','top':'0px','bottom':'0px','display':'table','height':'100%'})},[_c('div',{staticStyle:{"display":"table-cell","vertical-align":"middle"}},[_c('a',{style:({color:_vm.navArrow,'border-color':_vm.navBorder,'background-color':_vm.navBackground,  'border':'solid 1px #fff','padding':'5px 9px','cursor':'pointer'}),on:{"click":_vm.nextSlide}},[_vm._t("nav-right",[_vm._v("▶")])],2)])]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.pager),expression:"pager"}],staticClass:"pagination",style:({zIndex:_vm.contents.length+1, 'position':'absolute','bottom':'10px','left':'0px','width':_vm.pagerWidth,'text-align':'center','height':_vm.pagerHeight})},_vm._l((_vm.contents),function(page,i){return _c('a',{key:'page'+i,style:({'background-color':i==_vm.slideIndex?_vm.pagerBackground:'transparent','display':'inline-block','border':'solid 1px '+_vm.pagerBorder,'border-radius':'12px','height':_vm.pagerSize+'px','width':_vm.pagerSize+'px','margin-left':'2px','margin-right':'2px','cursor':'pointer' }),on:{"click":function($event){return _vm.selectPage(i)}}})}),0),_c('a',{directives:[{name:"show",rawName:"v-show",value:(_vm.fullscreen),expression:"fullscreen"}],staticClass:"fullscreen",style:({zIndex:_vm.contents.length+1,'position':'absolute','top':'20px','right':'20px','color':'#fff','font-size':'21px','cursor':'pointer'}),on:{"click":_vm.fullScreen}},[_vm._t("fullscreen",[_vm._v(" ↗ "),_c('span',{staticStyle:{"position":"absolute","top":"0px","left":"0px"}},[_vm._v("↙")]),_c('span',{staticStyle:{"position":"absolute","top":"1px","left":"-1px","transform":"rotate(-90deg)"}},[_vm._v("↗")]),_c('span',{staticStyle:{"position":"absolute","top":"1px","left":"-1px","transform":"rotate(-90deg)"}},[_vm._v("↙")])])],2)],2),(_vm.thumbs)?_c('div',{staticClass:"thumbnails",style:({'position':'relative','width':'100%','overflow-x':'hidden','height':_vm.params.thumbs.height+'px',backgroundColor: _vm.thumbsBackground})},[_c('table',{ref:"thumbsTbl",staticStyle:{"position":"absolute","top":"0px","left":"0px","border-style":"none","padding":"0","margin":"0","border-spacing":"0","border":"none"}},[_c('tr',_vm._l((_vm.thumb_paths),function(src,index){return _c('td',{key:src,staticStyle:{"padding":"0","margin":"0","box-sizing":"border-box","border-spacing":"0"},attrs:{"cellpadding":"0","cellspacing":"0","data-x":_vm.params.thumbs.height*index,"data-index":index}},[_c('div',{style:({'cursor':'pointer','background-image':'url('+src+')','background-repeat':'no-repeat','background-size':'cover','width':_vm.params.thumbs.width+'px','height':_vm.params.thumbs.height+'px','box-sizing':'border-box','border-style':'solid','border-width':(index==_vm.slideIndex?2:1)+'px','border-color':index==_vm.slideIndex?_vm.thumbsSelectedBorder:_vm.thumbsBorder}),on:{"click":function($event){return _vm.selectThumb(index)}}})])}),0)])]):_vm._e()])}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./vue-slideshow.vue?vue&type=template&id=44e04e74&
+// CONCATENATED MODULE: ./vue-slideshow.vue?vue&type=template&id=44dc3d98&
 
 // EXTERNAL MODULE: /Users/fisigma/.nvm/versions/node/v12.16.1/lib/node_modules/@vue/cli-service-global/node_modules/core-js/modules/es.array.for-each.js
 var es_array_for_each = __webpack_require__("6efa");
@@ -839,7 +839,68 @@ var web_timers = __webpack_require__("a11f");
       return heighttmp;
     }
   },
+  watch: {
+    slideIndex: function slideIndex(newVal, oldVal) {
+      //console.log('index changed',oldVal,newVal);
+      var twidth = this.width;
+      var tblwidth = this.$refs['thumbsTbl'].offsetWidth;
+      var smove = false;
+
+      if (twidth < tblwidth) {
+        smove = true; //console.log(smove);
+      } //console.log(smove);
+
+
+      if (smove) {
+        if (oldVal < newVal) {
+          this.moveThumbs('left', oldVal, newVal);
+        } else {
+          this.moveThumbs('right', oldVal, newVal);
+        }
+      }
+    }
+  },
   methods: {
+    moveThumbs: function moveThumbs(direction, fromIndex, toIndex) {
+      var move = true;
+
+      if (move) {
+        var twidth = this.width;
+        var diff = parseInt(this.$refs['thumbsTbl'].offsetWidth - twidth);
+        var left = parseInt(this.$refs['thumbsTbl'].style.left.replace('px', ''));
+
+        if (direction == 'left' && fromIndex != toIndex) {
+          if (diff > 0) {
+            var left_to_move = diff - Math.abs(left);
+            var distance = left_to_move - parseInt(this.params.thumbs.width);
+
+            if (distance < 0) {
+              if (Math.abs(distance) < this.params.thumbs.width) {
+                distance = this.params.thumbs.width - left_to_move;
+              } else {
+                return;
+              }
+            } else {
+              distance = this.params.thumbs.width;
+            }
+
+            this.slideLeft(this.$refs['thumbsTbl'], left + distance * -1, distance, function () {});
+          }
+        } else if (direction == 'right' && fromIndex != toIndex) {
+          if (diff > 0) {
+            var distance2 = left + this.params.thumbs.width;
+
+            if (distance2 <= 0) {
+              distance2 = this.params.thumbs.width;
+            } else {
+              distance2 = Math.abs(left); //this.params.thumbs.width;
+            }
+
+            this.slideRight(this.$refs['thumbsTbl'], left + distance2, distance2, function () {});
+          }
+        }
+      }
+    },
     slideLeft: function slideLeft(elem, to, _final, done) {
       var _this = this;
 
@@ -953,6 +1014,10 @@ var web_timers = __webpack_require__("a11f");
         return;
       }
 
+      this.$emit('beforeAnimate', {
+        instance: this,
+        index: cindex
+      });
       this.animated_elements = 0;
       this.animating = true;
       var ccontent = this.contents[cindex];
@@ -990,8 +1055,11 @@ var web_timers = __webpack_require__("a11f");
       this.animated_elements++;
 
       if (this.animated_elements == 2) {
-        //move to next one
+        this.$emit('animated', {
+          instance: this
+        }); //move to next one
         //this.animated_elements=0;
+
         this.animating = false;
         var cindex = this.slideIndex;
         var nindex = cindex + 1 > this.contents.length - 1 ? 0 : cindex + 1;
@@ -1010,9 +1078,11 @@ var web_timers = __webpack_require__("a11f");
     },
     fullScreen: function fullScreen() {
       if (this.isFullScreen) {
+        this.$emit('exitFullScreen');
         document.exitFullscreen();
       } else {
         if (this.$el.requestFullscreen) {
+          this.$emit('enterFullScreen');
           this.$el.requestFullscreen();
         }
       }
@@ -1079,6 +1149,11 @@ var web_timers = __webpack_require__("a11f");
         if (cindex != this.contents.length - 1) {
           this.slideIndex = this.contents.length - 1;
           this.animate(cindex, this.contents.length - 1);
+          this.$emit('lastSlide', {
+            instance: this,
+            index: this.slideIndex,
+            newindex: this.contents.length - 1
+          });
         }
       }
     },
@@ -1089,7 +1164,11 @@ var web_timers = __webpack_require__("a11f");
         var nindex = cindex + 1 > this.contents.length - 1 ? 0 : cindex + 1;
         this.slideIndex = nindex;
         this.animate(cindex, nindex);
-        this.$emit('nextSlide', {});
+        this.$emit('nextSlide', {
+          instance: this,
+          index: cindex,
+          newindex: nindex
+        });
       }
     },
     previousSlide: function previousSlide() {
@@ -1099,7 +1178,11 @@ var web_timers = __webpack_require__("a11f");
         var nindex = cindex - 1 < 0 ? this.contents.length - 1 : cindex - 1;
         this.slideIndex = nindex;
         this.animate(cindex, nindex);
-        this.$emit('previousSlide', {});
+        this.$emit('previousSlide', {
+          instance: this,
+          index: cindex,
+          newindex: nindex
+        });
       }
     },
     createGhost: function createGhost() {

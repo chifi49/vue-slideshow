@@ -31,10 +31,10 @@
         </div>
 
         <div class="thumbnails" v-if="thumbs" :style="{'position':'relative','width':'100%','overflow-x':'hidden','height':params.thumbs.height+'px',backgroundColor: thumbsBackground}" >
-            <table style="position:absolute;top:0px;left:0px;border-style:none;padding:0;margin:0;border-spacing:0;border:none;">
+            <table ref="thumbsTbl" style="position:absolute;top:0px;left:0px;border-style:none;padding:0;margin:0;border-spacing:0;border:none;">
                 <tr>
                     <td v-for="(src,index) in thumb_paths" cellpadding="0" cellspacing="0" :data-x="params.thumbs.height*index" :data-index="index" v-bind:key="src" style="padding:0;margin:0;box-sizing:border-box;border-spacing:0;">
-                        <div :style="{'cursor':'pointer','background-image':'url('+src+')','background-repeat':'no-repeat','background-size':'cover','width':params.thumbs.width+'px','height':params.thumbs.height+'px','box-sizing':'border-box','border-style':'solid','border-width':'2px','border-color':index==slideIndex?thumbsSelectedBorder:thumbsBorder}" @click="selectThumb(index)"></div>
+                        <div :style="{'cursor':'pointer','background-image':'url('+src+')','background-repeat':'no-repeat','background-size':'cover','width':params.thumbs.width+'px','height':params.thumbs.height+'px','box-sizing':'border-box','border-style':'solid','border-width':(index==slideIndex?2:1)+'px','border-color':index==slideIndex?thumbsSelectedBorder:thumbsBorder}" @click="selectThumb(index)"></div>
                     </td>
                 </tr>
             </table>
@@ -201,7 +201,80 @@ export default {
         }
     },
 
+    watch:{
+        slideIndex:function(newVal,oldVal){
+            //console.log('index changed',oldVal,newVal);
+            
+            var twidth = this.width;
+            var tblwidth = this.$refs['thumbsTbl'].offsetWidth;
+            var smove = false;
+            if(twidth<tblwidth){
+                smove = true;
+                //console.log(smove);
+            }
+            //console.log(smove);
+            
+            if(smove){
+                if(oldVal<newVal){
+                    this.moveThumbs('left',oldVal,newVal)
+                }else{
+                    this.moveThumbs('right',oldVal,newVal);
+                }
+            }
+            
+        }
+    },
+
     methods:{
+        moveThumbs:function(direction,fromIndex,toIndex){
+            var move = true;
+            if(move ){
+                
+                var twidth = this.width;
+                var diff = parseInt(this.$refs['thumbsTbl'].offsetWidth - twidth);
+                var left = parseInt(this.$refs['thumbsTbl'].style.left.replace('px',''));
+
+                if(direction=='left' && fromIndex!=toIndex){
+                    
+                    
+                   if(diff>0){
+                    
+                        var left_to_move = diff - Math.abs(left);
+                        
+                        var distance = left_to_move - parseInt(this.params.thumbs.width);
+                        
+                        if(distance<0 ){
+                            
+                            if(Math.abs(distance)<this.params.thumbs.width){
+                                distance = this.params.thumbs.width - left_to_move;
+                            }else{
+                                return;
+                            }
+                        }else{
+                            distance = this.params.thumbs.width;
+                        }
+                        
+                        this.slideLeft(this.$refs['thumbsTbl'],left+distance*-1,distance,function(){});
+                   }
+
+                }else if(direction=='right' && fromIndex!=toIndex){
+                    
+                    if(diff>0){
+
+                        var distance2 = left + this.params.thumbs.width;
+                        
+                        if(distance2<=0){
+                            distance2 = this.params.thumbs.width;
+                        }else{
+                            distance2 = Math.abs(left);//this.params.thumbs.width;
+                        }
+                        
+                        this.slideRight(this.$refs['thumbsTbl'],left+distance2,distance2,function(){});
+                   }
+                   
+                }
+            }
+        },
         slideLeft:function(elem,to,final,done){
             //var distance = 0;
             var nowt = (new Date()).getTime();
@@ -290,6 +363,9 @@ export default {
             if(this.animating){
                 return;
             }
+            
+            this.$emit('beforeAnimate',{instance:this,index:cindex})
+
             this.animated_elements = 0;
 
             this.animating = true;
@@ -324,6 +400,7 @@ export default {
         animate_finished:function(){
             this.animated_elements++;
             if(this.animated_elements==2){
+                this.$emit('animated',{instance:this})
                 //move to next one
                 //this.animated_elements=0;
                 this.animating = false;
@@ -342,9 +419,11 @@ export default {
         },
         fullScreen:function(){
             if(this.isFullScreen){
+                this.$emit('exitFullScreen');
                 document.exitFullscreen();
             }else{
                 if(this.$el.requestFullscreen){
+                    this.$emit('enterFullScreen');
                     this.$el.requestFullscreen();
                 }
             }
@@ -410,6 +489,7 @@ export default {
                 if(cindex!=this.contents.length-1){
                     this.slideIndex = this.contents.length-1;
                     this.animate(cindex,this.contents.length-1);
+                    this.$emit('lastSlide',{instance:this,index:this.slideIndex,newindex:this.contents.length-1})
                 }
             }
         },
@@ -421,7 +501,7 @@ export default {
                 var nindex = cindex+1>this.contents.length-1?0:cindex+1;
                 this.slideIndex = nindex;
                 this.animate(cindex,nindex);
-                this.$emit('nextSlide',{})
+                this.$emit('nextSlide',{instance:this,index:cindex,newindex:nindex})
             }
         },
         previousSlide:function(){
@@ -431,7 +511,7 @@ export default {
                 var nindex = cindex-1<0?this.contents.length-1:cindex-1;
                 this.slideIndex = nindex;
                 this.animate(cindex,nindex);
-                this.$emit('previousSlide',{})
+                this.$emit('previousSlide',{instance:this,index:cindex,newindex:nindex})
             }
         },
         createGhost:function(){

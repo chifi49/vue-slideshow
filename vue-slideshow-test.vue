@@ -4,7 +4,7 @@
             
                 <div class="content" v-bind:key="content.image" v-for="content in contents">
                     <img :src="content.image" />
-                    <div :data-pos-v="content.position.vertical" :data-pos-h="content.position.horizontal" >
+                    <div v-if="content.title" :data-pos-v="content.position.vertical" :data-pos-h="content.position.horizontal" >
                         <div>
                             <div>
                                 <template v-if="content.title">
@@ -45,8 +45,8 @@ export default{
                 minHeight:360,
                 thumbs:{
                     visible:true,
-                    height:70,
-                    width:100
+                    height:90,
+                    width:120
                 },
                 nav:{
                     visible:true
@@ -110,8 +110,48 @@ export default{
                         vertical:'bottom',
                         horizontal:'center'
                     }
+                },
+                {
+                     
+                    image:'https://media.publit.io/file/islands/5.jpg' 
+                    
+                },
+                {
+                     
+                    image:'https://media.publit.io/file/islands/6.jpg' 
+                    
+                },
+                {
+                     
+                    image:'https://media.publit.io/file/islands/7.jpg' 
+                    
                 }
-                
+                ,
+                {
+                     
+                    image:'https://media.publit.io/file/islands/8.jpg' 
+                    
+                },
+                {
+                     
+                    image:'https://media.publit.io/file/islands/9.jpg' 
+                    
+                },
+                {
+                     
+                    image:'https://media.publit.io/file/islands/10.jpg' 
+                    
+                },
+                {
+                     
+                    image:'https://media.publit.io/file/islands/11.jpg' 
+                    
+                },
+                {
+                     
+                    image:'https://media.publit.io/file/islands/12.jpg' 
+                    
+                }
             ]
         }
     },
