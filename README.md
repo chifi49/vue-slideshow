@@ -1,11 +1,11 @@
 # vue-slideshow
 A content/image slideshow with touch support and fade/slide effect made with vuejs
 
-## installation
+## Installation
 npm install --save @chifi49/vue-slideshow
 
-## use
-````
+## Usage
+```
 <template>
  <vueslideshow :params="slideshowParams">
    <div class="content">
@@ -47,4 +47,5 @@ export default{
     }
 }
 </script>
+
 ```
