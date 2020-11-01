@@ -384,6 +384,29 @@ export default {
         getBackgroundHeight:function(){
             return this.maxheight;
         },
+        
+        firstSlide:function(){
+            if(!this.amazing){
+                clearTimeout(this.animating_timeout);
+                var cindex = this.slideIndex;
+                if(cindex!=0){
+                    this.slideIndex = 0;
+                    this.animate(cindex,0);
+                }
+            }
+        },
+        
+        lastSlide:function(){
+            if(!this.amazing){
+                clearTimeout(this.animating_timeout);
+                var cindex = this.slideIndex;
+                if(cindex!=this.contents.length-1){
+                    this.slideIndex = this.contents.length-1;
+                    this.animate(cindex,this.contents.length-1);
+                }
+            }
+        },
+        
         nextSlide:function(){
             if(!this.animating){
                 clearTimeout(this.animating_timeout);

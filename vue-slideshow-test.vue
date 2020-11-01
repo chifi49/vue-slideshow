@@ -64,9 +64,37 @@ export default{
                 'https://media.publit.io/file/islands/7.jpg'
             ],
             contents:[
-                {title:'hi there', subtitle:'where are you?', body:'everything ok?', buttons:[{text:'next',action:'nextSlide'}], image:'https://media.publit.io/file/islands/1.jpg' },
-                {title:'howdy?', subtitle:'did you go?', body:'everything ok?', buttons:[{text:'previous',action:'previousSlide'},{text:'cancel',action:'nextSlide'}], image:'https://media.publit.io/file/islands/2.jpg' },
-                {title:'My Ninja!', subtitle:'are you white?', body:'we will fight!', buttons:[{text:'yes',action:'firstSlide'}], image:'https://media.publit.io/file/islands/3.jpg' }
+                {
+                    title:'hi there', subtitle:'where are you?', body:'everything ok?', 
+                    buttons:[
+                        {text:'next',action:'nextSlide'}
+                    ], 
+                    image:'https://media.publit.io/file/islands/1.jpg' 
+                },
+                {
+                    title:'howdy?', subtitle:'did you go?', body:'everything ok?', 
+                    buttons:[
+                        {text:'previous',action:'previousSlide'},{text:'next',action:'nextSlide'}
+                    ], 
+                    image:'https://media.publit.io/file/islands/2.jpg' 
+                }
+                ,
+                {
+                    title:'My Ninja!', subtitle:'are you white?', body:'we will fight!', 
+                    buttons:[
+                        {text:'yes',action:'firstSlide'},{text:'no',action:'lastSlide'}
+                    ], 
+                    image:'https://media.publit.io/file/islands/3.jpg' 
+                }
+                ,
+                {
+                    title:'Yes or No!', subtitle:'are you black?', body:'black lives matters!', 
+                    buttons:[
+                        {text:'yes',action:'previousSlide'},{text:'no',action:'nextSlide'}
+                    ], 
+                    image:'https://media.publit.io/file/islands/4.jpg' 
+                }
+                
             ]
         }
     },
