@@ -2,25 +2,29 @@
 A content/image slideshow with touch support and fade/slide effect made with vuejs
 
 ## Installation
-npm install --save @chifi49/vue-slideshow
+`npm install --save @chifi49/vue-slideshow`
+or
+`<script src="vue-slideshow.umd.min.js"></script>`
 
 ## Usage
 ```
 <template>
- <vueslideshow :params="slideshowParams">
-   <div class="content">
-     <img src="./images/1.jpg" />
-   </div>
-   <div class="content">
-     <img src="./images/2.jpg" />
-   </div>
-   <div class="content">
-     <img src="./images/3.jpg" />
-   </div>
- </vueslideshow>
+    <vueslideshow :params="slideshowParams">
+        <div class="content">
+            <img src="./images/1.jpg" />
+        </div>
+        <div class="content">
+            <img src="./images/2.jpg" />
+        </div>
+        <div class="content">
+            <img src="./images/3.jpg" />
+        </div>
+    </vueslideshow>
 </template>
+
 <script>
 import vueslideshow from '@chifi49/vue-slideshow
+
 export default{
     components:{
         vueslideshow
