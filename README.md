@@ -25,7 +25,7 @@ or
 </template>
 
 <script>
-import vueslideshow from '@chifi49/vue-slideshow
+import vueslideshow from '@chifi49/vue-slideshow'
 
 export default{
     components:{
