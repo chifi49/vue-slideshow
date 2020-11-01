@@ -36,12 +36,21 @@ export default{
            slideshowParams:{
               animation:'fade',//fade or slide,
               autoplay:true, //true or false
+              minHeight: 400, //default to 100% of window viewport height
+              maxHeight: 600, //default to 100% of window viewport height
               nav:{
-                  visible:true
+                  visible:true,
+                  borderColor:'#fff',
+                  arrowColor:'#fff',
+                  backgroundColor:'transparent'
               },
               pager:{
                   visible:true,
                   mode:'bullets',//defaults to bullets (bullets or counter)
+                  borderColor:'#fff',//defaults to #fff
+                  backgroundColor:'#000',//defaults to transparent
+                  borderColor:'#fff', //defaults to #fff
+                  size: 12 //defaults to 12 only for 'bullets' mode
               },
               thumbs:{
                   visible:true,
@@ -54,6 +63,24 @@ export default{
 }
 </script>
 
+```
+
+### Events
+```
+<vueslideshow 
+    @inited
+    @animated 
+    @beforeAnimate 
+    @animated
+    @nextSlide 
+    @previousSlide
+    @enterFullScreen
+    @exitFullScreen
+    @pageSelected
+    @thumbSelected
+    >
+    ...
+</vueslideshow>
 ```
 
 ### Methods
