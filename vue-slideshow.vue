@@ -16,7 +16,7 @@
                     </a>
                 </div>
             </div>
-            <div class="pagination" v-show="pager" :style="{zIndex:contents.length+1, 'position':'absolute','bottom':'10px','left':'0px','width':'100%','text-align':'center'}">
+            <div class="pagination" v-show="pager" :style="{zIndex:contents.length+1, 'position':'absolute','bottom':'10px','left':'0px','width':pagerWidth,'text-align':'center','height':pagerHeight}">
                 <a v-for="(page,i) in contents" :style="{'background-color':i==slideIndex?pagerBackground:'transparent','display':'inline-block','border':'solid 1px '+pagerBorder,'border-radius':'12px','height':pagerSize+'px','width':pagerSize+'px','margin-left':'2px','margin-right':'2px','cursor':'pointer' }" v-bind:key="'page'+i" @click="selectPage(i)"></a>
             </div>
             <a class="fullscreen" @click="fullScreen" v-show="fullscreen" :style="{zIndex:contents.length+1,'position':'absolute','top':'20px','right':'20px','color':'#fff','font-size':'21px','cursor':'pointer'}">
@@ -30,7 +30,7 @@
             
         </div>
 
-        <div class="thumbnails" v-if="thumbs" :style="{'position':'relative','width':'100%','overflow-x':'hidden','height':params.thumbs.height+'px'}" >
+        <div class="thumbnails" v-if="thumbs" :style="{'position':'relative','width':'100%','overflow-x':'hidden','height':params.thumbs.height+'px',backgroundColor: thumbsBackground}" >
             <table style="position:absolute;top:0px;left:0px;border-style:none;padding:0;margin:0;border-spacing:0;border:none;">
                 <tr>
                     <td v-for="(src,index) in thumb_paths" cellpadding="0" cellspacing="0" :data-x="params.thumbs.height*index" :data-index="index" v-bind:key="src" style="padding:0;margin:0;box-sizing:border-box;border-spacing:0;">
@@ -49,6 +49,7 @@ export default {
             type:Object,
             default:function(){
                 return{
+                    mode:'horizontal',
                     autoplay: true,
                     backgroundColor:'#000',
                     imageRatio:1,
@@ -59,7 +60,10 @@ export default {
                     thumbs:{
                         visible:true,
                         height:90,
-                        width:100
+                        width:100,
+                        backgroundColor:'#000',
+                        borderColor:'#000',
+                        selectedBorderColor:'#fff'
                     },
                     nav:{
                         visible:false,
@@ -107,6 +111,10 @@ export default {
         }
     },
     computed:{
+        mode:function(){
+            return this.params && this.params.mode?this.params.mode:'horizontal';
+        },
+        
         backgroundColor:function(){
             return this.params && this.params.backgroundColor?this.params.backgroundColor:'#000';
         },
@@ -116,11 +124,22 @@ export default {
         fullscreen:function(){
             return this.params && typeof this.params.fullscreen!=='undefined'?this.params.fullscreen:true;
         },
+        thumbsBackground:function(){
+            return this.params && this.params.thumbs && this.params.thumbs.backgroundColor?this.params.thumbs.backgroundColor:'#000';
+        },
+        
         thumbsSelectedBorder:function(){
-            return this.params && this.params.thumbs && this.params.thumbs.selectedBorderColor?this.params.thumbs.selectedBorderColor:'#000';
+            return this.params && this.params.thumbs && this.params.thumbs.selectedBorderColor?this.params.thumbs.selectedBorderColor:'#fff';
         },
         thumbsBorder:function(){
-            return this.params && this.params.thumbs && this.params.thumbs.borderColor?this.params.thumbs.borderColor:'#fff';
+            return this.params && this.params.thumbs && this.params.thumbs.borderColor?this.params.thumbs.borderColor:'#000';
+        },
+        
+        pagerWidth:function(){
+            return this.mode=='horizontal'?'100%':'auto';
+        },
+        pagerHeight:function(){
+            return this.mode=='vertical'?'100%':'auto';
         },
         pagerSize:function(){
             return this.params && this.params.pager && this.params.pager.size?this.params.pager.size:12;
@@ -131,6 +150,7 @@ export default {
         pagerBackground:function(){
             return this.params && this.params.pager && this.params.pager.backgroundColor?this.params.pager.backgroundColor:'#fff';
         },
+
         autoplay:function(){
             return this.params && typeof this.params.autoplay!=='undefined'?this.params.autoplay:true;
         },
@@ -161,6 +181,7 @@ export default {
         thumbs:function(){
             return this.params && this.params.thumbs && this.params.thumbs.visible?this.params.thumbs.visible:false;
         },
+        
         correctHeight:function(){
             var heighttmp = this.height;
             if(this.params && this.params.maxHeight && this.params.maxHeight<heighttmp){
@@ -275,8 +296,8 @@ export default {
             var ccontent = this.contents[cindex];
             var ncontent = this.contents[nindex];
             if(this.animation=='fade'){
-                ccontent.style.zIndex = 2;
-                ncontent.style.zIndex = 1;
+                //ccontent.style.zIndex = 2;
+                //ncontent.style.zIndex = 1;
                 this.fadeOut(ccontent,this.animate_finished);
                 this.fadeIn(ncontent,this.animate_finished);
             }else if(this.animation=='slide'){
@@ -284,8 +305,8 @@ export default {
                     var final = this.width;
                     var cto = this.width*-1;
                     var nto = 0;
-                    ccontent.style.zIndex=1;
-                    ncontent.style.zIndex=2;
+                    //ccontent.style.zIndex=1;
+                    //ncontent.style.zIndex=2;
                     ccontent.style.left='0px';
                     ncontent.style.left=this.width+'px';
                     ncontent.style.opacity = 1;
@@ -397,7 +418,7 @@ export default {
             this.height = this.ghost.offsetHeight;
             this.parent.style.width = this.width+'px';
             this.parent.style.height = this.correctHeight+'px';
-            this.drag.style.height = this.correctHeight+'px';
+            //this.drag.style.height = this.correctHeight+'px';
             this.resizeBackgrounds();
         },
         createBackgrounds:function(){
@@ -414,7 +435,7 @@ export default {
             var src = img.src;
             content.removeChild(img);
             content.setAttribute('data-index',index);
-            content.style.cssText = 'position:absolute;left:0px;top:0px;z-index:1';
+            content.style.cssText = 'position:absolute;left:0px;top:0px;';
             this.loadImage(content,src,function(){
                 //content.style.setAttribute('data-width',opt.w);
                 //content.style.setAttribute('data-height',opt.h);
@@ -431,6 +452,46 @@ export default {
             }
             content.setAttribute('data-url',src);
             content.setAttribute('data-thumb',tsrc);
+
+            var child = content.querySelector('div:first-child');
+            if(child!=null){
+                var posv = child.getAttribute('data-pos-v') || 'middle';
+                var posh = child.getAttribute('data-pos-h') || 'center';
+                
+                child.style.display='table';
+                child.style.width='100%';
+                child.style.height='100%';
+                child.style.textAlign = posh;
+                
+                var cellme = child.querySelector('div:first-child');
+                cellme.style.display='table-cell';
+                cellme.style.verticalAlign = posv;
+                
+                
+                var divme = cellme.querySelector('div:first-child');
+                
+                divme.style.display='inline-block';
+                
+                divme.style.position='relative';
+                divme.style.zIndex=this.contents.length+1;
+                
+                /**
+                var card = document.createElement('div');
+                card.style.cssText = 'display:table;height:100%;width:100%;';
+                card.style.textAlign=posh;
+                var cell = document.createElement('div');
+                cell.style.cssText = 'display:table-cell;';
+                cell.style.verticalAlign= posv;
+                var text = document.createElement('div');
+                text.style.cssText = 'position:relative;display:inline-block;z-index:'+this.contents.length+1+';';
+                text.innerHTML = child.innerHTML;
+                cell.appendChild(text);
+                //card.appendChild(cell);
+                //content.removeChild(child);
+                //content.appendChild(card);
+                **/
+            }
+
             this.image_paths.push(src);
             this.thumb_paths.push(tsrc);
 
@@ -482,9 +543,9 @@ export default {
         },
         createDragHandler:function(){
             this.drag = document.createElement('div');
-            this.drag.style.cssText = 'position:absolute;z-index:'+(this.contents.length)+';top:0px;left:0px;';
-            this.drag.style.width = this.width+'px';
-            this.drag.style.height = this.correctHeight+'px';
+            this.drag.style.cssText = 'position:absolute;z-index:'+(this.contents.length)+';top:0px;left:0px;bottom:0px;right:0px;';
+            //this.drag.style.width = this.width+'px';
+            //this.drag.style.height = this.correctHeight+'px';
             this.parent.appendChild(this.drag);
             this.drag.addEventListener('mousedown',this.dragStarted);
         },

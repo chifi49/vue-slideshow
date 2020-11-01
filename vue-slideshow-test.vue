@@ -2,8 +2,27 @@
     <div id="app">
         <vueslideshow ref="slideshow" :heightResizer="heightResize" v-bind:params="slideshowParams">
             
-                <div class="content" v-bind:key="image" v-for="image in images">
-                    <img :src="image" />
+                
+                <div class="content" v-bind:key="content.image" v-for="content in contents">
+                    <img :src="content.image" />
+                    <div >
+                        <div>
+                            <div>
+                                <template v-if="content.title">
+                                    <h2>{{content.title}}</h2>
+                                </template>
+                                <template v-if="content.body">
+                                    <p>{{content.body}}</p>
+                                </template>
+                                <template v-if="content.buttons && content.buttons.length>0">
+                                    <button v-for="button in content.buttons" v-bind:key="button.text" v-on:click="button_function(button.action)">
+                                        {{button.text}}
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
                 
             
@@ -18,10 +37,10 @@ export default{
     data(){
         return {
             slideshowParams:{
-                imageRatio:2,//0, 1 and 2
-                autoplay:true,
+                imageRatio:1,//0, 1 and 2
+                autoplay:false,
                 fullscreen:true,
-                animation:'fade',
+                animation:'slide',
                 minHeight:360,
                 thumbs:{
                     visible:true,
@@ -38,11 +57,23 @@ export default{
             images:[
                 'https://media.publit.io/file/islands/1.jpg',
                 'https://media.publit.io/file/islands/2.jpg',
-                'https://media.publit.io/file/islands/3.jpg'
+                'https://media.publit.io/file/islands/3.jpg',
+                'https://media.publit.io/file/islands/4.jpg',
+                'https://media.publit.io/file/islands/5.jpg',
+                'https://media.publit.io/file/islands/6.jpg',
+                'https://media.publit.io/file/islands/7.jpg'
+            ],
+            contents:[
+                {title:'hi there', subtitle:'where are you?', body:'everything ok?', buttons:[{text:'next',action:'nextSlide'}], image:'https://media.publit.io/file/islands/1.jpg' },
+                {title:'howdy?', subtitle:'did you go?', body:'everything ok?', buttons:[{text:'previous',action:'previousSlide'},{text:'cancel',action:'nextSlide'}], image:'https://media.publit.io/file/islands/2.jpg' },
+                {title:'My Ninja!', subtitle:'are you white?', body:'we will fight!', buttons:[{text:'yes',action:'firstSlide'}], image:'https://media.publit.io/file/islands/3.jpg' }
             ]
         }
     },
     methods:{
+        button_function:function(name){
+            this.$refs['slideshow'][name]();
+        },
         heightResize:function( instance ){
             return instance.getHeight() - this.slideshowParams.thumbs.height
         },
