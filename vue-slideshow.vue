@@ -17,7 +17,14 @@
                 </div>
             </div>
             <div class="pagination" v-show="pager" :style="{zIndex:contents.length+1, 'position':'absolute','bottom':'10px','left':'0px','width':pagerWidth,'text-align':'center','height':pagerHeight}">
-                <a v-for="(page,i) in contents" :style="{'background-color':i==slideIndex?pagerBackground:'transparent','display':'inline-block','border':'solid 1px '+pagerBorder,'border-radius':'12px','height':pagerSize+'px','width':pagerSize+'px','margin-left':'2px','margin-right':'2px','cursor':'pointer' }" v-bind:key="'page'+i" @click="selectPage(i)"></a>
+                <template v-if="pagerMode=='bullets'?true:false">
+                    <a v-for="(page,i) in contents" :style="{'background-color':i==slideIndex?pagerBackground:'transparent','display':'inline-block','border':'solid 1px '+pagerBorder,'border-radius':'12px','height':pagerSize+'px','width':pagerSize+'px','margin-left':'2px','margin-right':'2px','cursor':'pointer' }" v-bind:key="'page'+i" @click="selectPage(i)"></a>
+                </template>
+                <template v-if="pagerMode=='counter'?true:false">
+                    <div :style="{display:'inline-block',backgroundColor:pagerBackground,color:pagerColor,borderColor:pagerBorder,borderStyle:'solid',padding:'5px 7px',borderWidth:'1px'}">
+                        <a :style="{color:pagerColor}" >{{slideIndex+1}}</a> / <a :style="{color:pagerColor}">{{contents.length}}</a>
+                    </div>
+                </template>
             </div>
             <a class="fullscreen" @click="fullScreen" v-show="fullscreen" :style="{zIndex:contents.length+1,'position':'absolute','top':'20px','right':'20px','color':'#fff','font-size':'21px','cursor':'pointer'}">
                 <slot name="fullscreen">
@@ -73,6 +80,7 @@ export default {
                     },
                     pager:{
                         visible:false,
+                        mode:'bullets',//counter,numbers
                         position:{
                             bottom:10,
                             left:0
@@ -135,6 +143,9 @@ export default {
             return this.params && this.params.thumbs && this.params.thumbs.borderColor?this.params.thumbs.borderColor:'#000';
         },
         
+        pagerMode:function(){
+            return this.params && this.params.pager && this.params.pager.mode?this.params.pager.mode:'bullets';
+        },
         pagerWidth:function(){
             return this.mode=='horizontal'?'100%':'auto';
         },
@@ -149,6 +160,9 @@ export default {
         },
         pagerBackground:function(){
             return this.params && this.params.pager && this.params.pager.backgroundColor?this.params.pager.backgroundColor:'#fff';
+        },
+        pagerColor:function(){
+            return this.params && this.params.pager && this.params.pager.color?this.params.pager.color:'#fff';
         },
 
         autoplay:function(){
@@ -445,14 +459,14 @@ export default {
         selectPage:function(index){
             //var content = this.contents[index];
             //alert(content.getAttribute('data-url'));
-            if(!this.animating){
+            if(!this.animating && index!=this.slideIndex){
                 //alert(index);
                 this.moveTo(index);
                 this.pageSelected(index);
             }
         },
         selectThumb:function(index){
-            if(!this.animating){
+            if(!this.animating && index!=this.slideIndex){
                 this.moveTo(index);
                 this.thumbSelected(index)
             }
@@ -696,7 +710,7 @@ export default {
             if(this.isDragging){
                 
                 
-                console.log(this.params.autoplay);
+                //console.log(this.params.autoplay);
                 //this.dragDiffX = event.pageX - this.dragStartX;
                 //console.log(this.dragDiffX);
                 var moved_enought = Math.abs(this.dragDiffX)>(this.width/4)?true:false;
@@ -791,7 +805,7 @@ export default {
                     }
                 }
             }
-            console.log(animated);
+            //console.log(animated);
             if(this.autoplay && !animated){
                 this.animating_timeout = setTimeout(()=>{
                     //this.slideIndex = nindex;

@@ -23,7 +23,10 @@
 
                     </div>
                 </div>
-            
+                
+                <button slot="fullscreen">full</button>
+                <span slot="nav-left">previous</span>
+                <span slot="nav-right">next</span>
         </vueslideshow>
 
         <br />
@@ -52,7 +55,11 @@ export default{
                     visible:true
                 },
                 pager:{
-                    visible:true
+                    visible:true,
+                    mode:'counter',
+                    color:'#fff',
+                    backgroundColor:'#000',
+                    borderColor:'#fff'
                 }
             },
             images:[
