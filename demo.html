@@ -1,11 +1,12 @@
-<html>
+<!DOCTYPE html>
+<html >
 <head>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
-<script src="https://raw.githubusercontent.com/chifi49/vue-slideshow/main/dist/vue-slideshow.umd.js"></script>
+<script src="./vue-slideshow.min.js"></script>
 </head>
 <body>
 <div id="app">
-<vue-slideshow :params="slideshowParams">
+<vueslideshow :params="slideshowParams">
     <div class="content" >
         <img src="https://media.publit.io/file/islands/1.jpg" />
     </div>
@@ -15,7 +16,7 @@
     <div class="content">
         <img src="https://media.publit.io/file/islands/3.jpg" />
     </div>
-</vue-slideshow>
+</vueslideshow>
 
 </div>
 <script>
@@ -28,12 +29,18 @@ new Vue({
     data:function(){
         return {
             slideshowParams:{
-                dragEnabled:true
+                dragEnabled:true,
+                nav:{
+                    visible:true
+                },
+                pager:{
+                    visible:true
+                }
             }
         }
     },
     mounted:function(){
-        alert('mounted');
+       
     }
 })
 </script>

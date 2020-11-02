@@ -244,19 +244,22 @@ export default {
             //console.log('index changed',oldVal,newVal);
             
             var twidth = this.width;
-            var tblwidth = this.$refs['thumbsTbl'].offsetWidth;
-            var smove = false;
-            if(twidth<tblwidth){
-                smove = true;
+
+            if(this.params && this.params.thumbs && this.params.thumbs.visible){
+                var tblwidth = this.$refs['thumbsTbl'].offsetWidth;
+                var smove = false;
+                if(twidth<tblwidth){
+                    smove = true;
+                    //console.log(smove);
+                }
                 //console.log(smove);
-            }
-            //console.log(smove);
-            
-            if(smove){
-                if(oldVal<newVal){
-                    this.moveThumbs('left',oldVal,newVal)
-                }else{
-                    this.moveThumbs('right',oldVal,newVal);
+                
+                if(smove){
+                    if(oldVal<newVal){
+                        this.moveThumbs('left',oldVal,newVal)
+                    }else{
+                        this.moveThumbs('right',oldVal,newVal);
+                    }
                 }
             }
             

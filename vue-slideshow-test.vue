@@ -48,11 +48,15 @@ export default{
                 animation:'slide',
                 minHeight:360,
                 maxHeight:550,
+                
+                /**
                 thumbs:{
-                    visible:true,
+                    visible:false,
                     height:90,
                     width:120
                 },
+                **/
+                
                 nav:{
                     visible:true,
                     position:{
@@ -184,7 +188,7 @@ export default{
             this.$refs['slideshow'][name]();
         },
         heightResize:function( instance ){
-            return instance.getHeight() - this.slideshowParams.thumbs.height
+            return instance.getHeight();// - this.slideshowParams.thumbs.height
         },
         addContent:function(){
             //this.images.push('https://media.publit.io/file/islands/'+(this.images.length+1)+'.jpg');
@@ -193,10 +197,10 @@ export default{
             })
         },
         hideThumbs:function(){
-            this.slideshowParams.thumbs.visible=false;
+            //this.slideshowParams.thumbs.visible=false;
         },
         showThumbs:function(){
-            this.slideshowParams.thumbs.visible=true;
+            //this.slideshowParams.thumbs.visible=true;
         },
         thirdSlide:function(){
             this.$refs['slideshow'].slideTo(3);
