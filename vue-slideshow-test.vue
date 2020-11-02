@@ -46,20 +46,28 @@ export default{
                 fullscreen:true,
                 animation:'slide',
                 minHeight:360,
+                maxHeight:550,
                 thumbs:{
                     visible:true,
                     height:90,
                     width:120
                 },
                 nav:{
-                    visible:true
+                    visible:true,
+                    position:{
+                        vertical:'middle' //top, middle, bottom ( defaults to middle )
+                    }
                 },
                 pager:{
                     visible:true,
-                    mode:'counter',
+                    //mode:'counter',
                     color:'#fff',
-                    backgroundColor:'#000',
-                    borderColor:'#fff'
+                    backgroundColor:'#fff',
+                    borderColor:'#fff',
+                    position:{
+                        vertical:'top', //top, bottom ( defaults to bottom )
+                        horizontal:'center' //defaults to center (left, center, right)
+                    } //top or bottom, defaults to bottom
                 }
             },
             images:[

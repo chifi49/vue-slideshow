@@ -3,20 +3,20 @@
         <div class="container" style="overflow:hidden;">
             <slot></slot>
             <div v-show="nav"  :style="{zIndex:contents.length+1, 'left':'10px', 'position':'absolute','top':'0px','bottom':'0px','display':'table','height':'100%'}">
-                <div style='display:table-cell;vertical-align:middle;'>
+                <div :style="{display:'table-cell','vertical-align':navVertical}">
                     <a @click="previousSlide" :style="{color:navArrow,'border-color':navBorder,'background-color':navBackground, 'border':'solid 1px','padding':'5px 9px','cursor':'pointer'}">
                         <slot name="nav-left">&#9664;</slot>
                     </a>
                 </div>
             </div>
             <div v-show="nav"  :style="{zIndex:contents.length+1, 'right':'10px','position':'absolute','top':'0px','bottom':'0px','display':'table','height':'100%'}">
-                <div style='display:table-cell;vertical-align:middle;'>
+                <div :style="{display:'table-cell','vertical-align':navVertical}">
                     <a @click="nextSlide" :style="{color:navArrow,'border-color':navBorder,'background-color':navBackground,  'border':'solid 1px #fff','padding':'5px 9px','cursor':'pointer'}">
                         <slot name="nav-right" >&#9654;</slot>
                     </a>
                 </div>
             </div>
-            <div class="pagination" v-show="pager" :style="{zIndex:contents.length+1, 'position':'absolute','bottom':'10px','left':'0px','width':pagerWidth,'text-align':'center','height':pagerHeight}">
+            <div class="pagination" v-show="pager" :style="{zIndex:contents.length+1, 'position':'absolute','top':pagerVertical=='top'?'10px':'auto','bottom':pagerVertical=='bottom'?'10px':'auto','left':'0px','width':pagerWidth,'text-align':pagerHorizontal,'height':pagerHeight}">
                 <template v-if="pagerMode=='bullets'?true:false">
                     <a v-for="(page,i) in contents" :style="{'background-color':i==slideIndex?pagerBackground:'transparent','display':'inline-block','border':'solid 1px '+pagerBorder,'border-radius':'12px','height':pagerSize+'px','width':pagerSize+'px','margin-left':'2px','margin-right':'2px','cursor':'pointer' }" v-bind:key="'page'+i" @click="selectPage(i)"></a>
                 </template>
@@ -80,10 +80,14 @@ export default {
                     },
                     pager:{
                         visible:false,
+                        color:'#fff',
+                        backgroundColor:'#fff',
+                        borderColor:'#fff',
+                        size:12,//for bullets
                         mode:'bullets',//counter,numbers
                         position:{
-                            bottom:10,
-                            left:0
+                            vertical:'bottom',
+                            horizontal:'center'
                         }
                     }
                 }
@@ -143,6 +147,13 @@ export default {
             return this.params && this.params.thumbs && this.params.thumbs.borderColor?this.params.thumbs.borderColor:'#000';
         },
         
+        pagerVertical:function(){
+            return this.params && this.params.pager && this.params.pager.position && this.params.pager.position.vertical?this.params.pager.position.vertical:'bottom';
+        },
+        pagerHorizontal:function(){
+            return this.params && this.params.pager && this.params.pager.position && this.params.pager.position.horizontal?this.params.pager.position.horizontal:'center';
+        },
+
         pagerMode:function(){
             return this.params && this.params.pager && this.params.pager.mode?this.params.pager.mode:'bullets';
         },
@@ -177,6 +188,8 @@ export default {
         animation:function(){
             return this.params && this.params.animation && this.params.animation=='slide'?this.params.animation:'fade';
         },
+
+
         navArrow:function(){
             return this.params && this.params.nav && this.params.nav.arrowColor?this.params.nav.arrowColor:'#fff';
         },
@@ -186,9 +199,14 @@ export default {
         navBackground:function(){
             return this.params && this.params.nav && this.params.nav.backgroundColor?this.params.nav.backgroundColor:'transparent';
         },
+        navVertical:function(){
+            return this.params && this.params.nav && this.params.nav.position && this.params.nav.position.vertical?this.params.nav.position.vertical:'middle';
+        },
         nav:function(){
             return this.params && this.params.nav && this.params.nav.visible?this.params.nav.visible:false;
         },
+
+
         pager:function(){
             return this.params && this.params.pager && this.params.pager.visible?this.params.pager.visible:false;
         },
