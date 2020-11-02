@@ -1,0 +1,41 @@
+<html>
+<head>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+<script src="https://raw.githubusercontent.com/chifi49/vue-slideshow/main/dist/vue-slideshow.umd.js"></script>
+</head>
+<body>
+<div id="app">
+<vue-slideshow :params="slideshowParams">
+    <div class="content" >
+        <img src="https://media.publit.io/file/islands/1.jpg" />
+    </div>
+    <div class="content">
+        <img src="https://media.publit.io/file/islands/2.jpg" />
+    </div>
+    <div class="content">
+        <img src="https://media.publit.io/file/islands/3.jpg" />
+    </div>
+</vue-slideshow>
+
+</div>
+<script>
+//Vue.component('vue-slideshow',window['vue-slideshow']);
+new Vue({
+    'el':'#app',
+    components:{
+        'vueslideshow':window['vue-slideshow']
+    },
+    data:function(){
+        return {
+            slideshowParams:{
+                dragEnabled:true
+            }
+        }
+    },
+    mounted:function(){
+        alert('mounted');
+    }
+})
+</script>
+</body>
+</html>

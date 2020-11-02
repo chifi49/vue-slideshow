@@ -51,6 +51,7 @@
 </template>
 <script>
 export default {
+    name:'vue-slideshow',
     props:{
         params:{
             type:Object,
@@ -704,12 +705,13 @@ export default {
             clearTimeout(this.animating_timeout);
             //pause animation
             this.isDragging = false;
-            this.dragStartX = event.pageX;
+            this.dragStartX = event.touches && event.touches.length>0?event.touches[0].pageX:event.pageX;
             document.addEventListener('mousemove',this.dragging);
             document.addEventListener('mouseup',this.dragEnded)
         },
         dragging:function(){
-            this.dragDiffX = event.pageX - this.dragStartX;
+            var pageX = event.touches && event.touches.length>0?event.touches[0].pageX:event.pageX;
+            this.dragDiffX = pageX - this.dragStartX;
             //console.log(this.dragDiffX);
             var dragDiffX = Math.abs(this.dragDiffX);
             if(dragDiffX>20){
@@ -736,7 +738,7 @@ export default {
                     }
                 }     
 
-                this.$emit('dragging',{instance:this,startX: this.dragStartX, currentX: event.pageX, index: this.slideIndex, newindex: newindex})
+                this.$emit('dragging',{instance:this,startX: this.dragStartX, currentX: pageX, index: this.slideIndex, newindex: newindex})
             }else{
                 this.isDragging=false;
             }
