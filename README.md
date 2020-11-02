@@ -74,20 +74,80 @@ export default{
 
 ### Events
 ```
-<vueslideshow 
-    @inited
-    @animated 
-    @beforeAnimate 
-    @animated
-    @nextSlide 
-    @previousSlide
-    @enterFullScreen
-    @exitFullScreen
-    @pageSelected
-    @thumbSelected
-    >
-    ...
-</vueslideshow>
+<template>
+    <vueslideshow 
+        @inited = 'inited'
+        @beforeAnimate = 'beforeAnimate'
+        @animated = 'animated'
+        @firstSlide = 'firstSlide'
+        @previousSlide = 'previousSlide'
+        @nextSlide = 'nextSlide'
+        @lastSlide = 'lastSlide'
+        @enterFullScreen = 'enterFullScreen'
+        @exitFullScreen = 'exitFullScreen'
+        @pageSelected = 'pageSelected'
+        @thumbSelected = 'thumbSelected'
+        @dragging = 'dragging'
+        >
+        ...
+    </vueslideshow>
+</template>
+<script>
+export default{
+    methods:{
+        inited:function(params){
+            var instance = params.instance;
+        },
+        animated:function(params){
+
+        },
+        beforAnimate:function(params){
+
+        },
+        firstSlide:function(params){
+            var instance = params.instance;
+            var fromIndex = params.index;
+            var toIndex = params.newindex;
+        },
+        nextSlide:function(params){
+            var instance = params.instance;
+            var fromIndex = params.index;
+            var toIndex = params.newindex;
+        },
+        previousSlide:function(params){
+            var instance = params.instance;
+            var fromIndex = params.index;
+            var toIndex = params.newindex;
+        },
+        lastSlide:function(params){
+            var instance = params.instance;
+            var fromIndex = params.index;
+            var toIndex = params.newindex;
+        },
+        enterFullScreen:function(params){
+            var instance = params.instance;
+        },
+        exitFullScreen:function(params){
+            var instance = params.instance;
+        },
+        pageSelected:function(params){
+            var instance = params.instance;
+            var newindex = params.index;
+        },
+        thumbSelected:function(params){
+            var instance = params.instance;
+            var newindex = params.index;
+        },
+        dragging:function(params){
+            var instance = params.instance;
+            var startX = params.startX;
+            var currentX = params.currentX;
+            var index = params.index;
+            var toindex = params.newindex; // its -1 if we have not decided to move based on drag ratio 25%
+        }
+    }
+}
+</script>
 ```
 
 ### Methods
@@ -109,11 +169,16 @@ var slider = this.$refs['slider'];
 #### lastSlide
 `slider.lastSlide()`
 #### moveTo
-`slider.moveTo(3)` move to 3rd slide
+`slider.moveTo(3)` 
+move to 3rd slide
 #### showThumbs
 `slider.showThumbs()`
 #### hideThumbs
 `slider.hideThumbs()`
 #### fullScreen
 `slider.fullScreen()`
+#### getIndex (zero based)
+`slide.getCurrentIndex`
+#### getCurrentContent
+`slider.getCurrentContent`
 

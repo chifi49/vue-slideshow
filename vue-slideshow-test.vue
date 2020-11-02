@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <vueslideshow ref="slideshow" :heightResizer="heightResize" v-bind:params="slideshowParams">
+        <vueslideshow v-on:dragging="dragging" ref="slideshow" :maxHeightResizer="heightResize" v-bind:params="slideshowParams">
             
                 <div class="content" v-bind:key="content.image" v-for="content in contents">
                     <img :src="content.image" />
@@ -41,6 +41,7 @@ export default{
     data(){
         return {
             slideshowParams:{
+                dragEnabled: true, //defaults to true (true or false to move content with dragging or touch)
                 imageRatio:1,//0, 1 and 2
                 autoplay:false,
                 fullscreen:true,
@@ -171,6 +172,14 @@ export default{
         }
     },
     methods:{
+        dragging:function(params){
+            var instance = params.instance;
+            instance.getCurrentIndex();
+            var startX = params.startX;
+            var currentX = params.currentX;
+            console.log(startX,currentX);
+            console.log('we might move', params.newindex);
+        },
         button_function:function(name){
             this.$refs['slideshow'][name]();
         },

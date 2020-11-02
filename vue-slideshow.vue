@@ -58,6 +58,7 @@ export default {
                 return{
                     mode:'horizontal',
                     autoplay: true,
+                    dragEnabled: true,
                     backgroundColor:'#000',
                     imageRatio:1,
                     fullscreen:true,
@@ -93,7 +94,7 @@ export default {
                 }
             }
         },
-        heightResizer:{
+        maxHeightResizer:{
             type:Function
         }
     },
@@ -125,6 +126,10 @@ export default {
     computed:{
         mode:function(){
             return this.params && this.params.mode?this.params.mode:'horizontal';
+        },
+
+        canDrag:function(){
+            return this.params && this.params.dragEnabled?this.params.dragEnabled:true;
         },
         
         backgroundColor:function(){
@@ -219,8 +224,8 @@ export default {
             if(this.params && this.params.maxHeight && this.params.maxHeight<heighttmp){
                 heighttmp = this.params.maxHeight;
             }
-            if(this.heightResizer!=null){
-                var user_height= this.heightResizer(this);
+            if(this.maxHeightResizer!=null){
+                var user_height= this.maxHeightResizer(this);
                 if(user_height<heighttmp){
                     heighttmp = user_height;
                 }
@@ -491,10 +496,10 @@ export default {
         },
         pageSelected:function(i){
             
-            this.$emit('pageSelected',{index:i})
+            this.$emit('pageSelected',{instance:this, index:i})
         },
         thumbSelected:function(i){
-            this.$emit('thumbSelected',{index:i});
+            this.$emit('thumbSelected',{instance:this, index:i});
         },
         getHeight:function(){
             return this.height;
@@ -510,6 +515,7 @@ export default {
                 if(cindex!=0){
                     this.slideIndex = 0;
                     this.animate(cindex,0);
+                    this.$emit('firstSlide',{instance:this, index: this.slideIndex, newindex:0})
                 }
             }
         },
@@ -545,6 +551,12 @@ export default {
                 this.animate(cindex,nindex);
                 this.$emit('previousSlide',{instance:this,index:cindex,newindex:nindex})
             }
+        },
+        getCurrentIndex:function(){
+            return this.slideIndex;
+        },
+        getCurrentContent:function(){
+            return this.contents[this.slideIndex];//dom
         },
         createGhost:function(){
             if(this.ghost==null){
@@ -683,6 +695,10 @@ export default {
             if(this.animating){
                 return;
             }
+            console.log(this.params.dragEnabled);
+            if(!this.params.dragEnabled){
+                return;
+            }
             this.previous_autoplay = this.autoplay;
             this.params.autoplay = false;
             clearTimeout(this.animating_timeout);
@@ -703,19 +719,24 @@ export default {
                 var ccontent = this.contents[this.slideIndex];
                 ccontent.style.left = this.dragDiffX+'px';
                 //ccontent.style.left = this.dragDiffX+'px';
+                var newindex = -1;
                 if(this.dragDiffX<0){
                     if(this.slideIndex+1<=this.contents.length-1){
+                        newindex = this.slideIndex+1;
                         var ncontent = this.contents[this.slideIndex+1];
                         ncontent.style.opacity = 1;
                         ncontent.style.left = this.width+this.dragDiffX+'px'
                     }
                 }else{
                     if(this.slideIndex-1>=0){
+                        newindex = this.slideIndex-1;
                         var pcontent = this.contents[this.slideIndex-1];
                         pcontent.style.opacity = 1;
                         pcontent.style.left = (this.width*-1)+this.dragDiffX+'px';
                     }
                 }     
+
+                this.$emit('dragging',{instance:this,startX: this.dragStartX, currentX: event.pageX, index: this.slideIndex, newindex: newindex})
             }else{
                 this.isDragging=false;
             }
