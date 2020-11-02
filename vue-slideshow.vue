@@ -695,7 +695,7 @@ export default {
             if(this.animating){
                 return;
             }
-            console.log(this.params.dragEnabled);
+            //console.log(this.params.dragEnabled);
             if(!this.params.dragEnabled){
                 return;
             }
