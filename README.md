@@ -42,7 +42,10 @@ export default{
                   visible:true,
                   borderColor:'#fff',
                   arrowColor:'#fff',
-                  backgroundColor:'transparent'
+                  backgroundColor:'transparent',
+                  position:{
+                      vertical:'middle', //top, middle, bottom
+                  }
               },
               pager:{
                   visible:true,
@@ -50,7 +53,11 @@ export default{
                   borderColor:'#fff',//defaults to #fff
                   backgroundColor:'#000',//defaults to transparent
                   borderColor:'#fff', //defaults to #fff
-                  size: 12 //defaults to 12 only for 'bullets' mode
+                  size: 12, //defaults to 12 only for 'bullets' mode
+                  position:{
+                      vertical:'bottom', //bottom or top
+                      horizontal:'center' //left, center, right
+                  }
               },
               thumbs:{
                   visible:true,
